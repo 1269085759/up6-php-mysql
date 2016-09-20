@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../HttpUploader/jquery-1.3.2.min.js"></script>
+    <title>此页面用来测试fd_create.php是否正常</title>
+	<script language="javascript" type="text/javascript">
+		//json压缩工具：http://www.bejson.com/go.php?u=http://www.bejson.com/zhuanyi.php
+		$(document).ready(function ()
+		{
+			var json = encodeURIComponent('{"name":"soft","pid":0,"idLoc":0,"idSvr":0,"length":"102032","size":"10G","pathLoc":"d:/soft","pathSvr":"e:/web","foldersCount":0,"filesCount":0,"filesComplete":0,"folders":[{"name":"img1","pidLoc":0,"pidSvr":10,"idLoc":1,"idSvr":0,"pathLoc":"D:/Soft/img1","pathSvr":"E:/Web"},{"name":"img2","pidLoc":1,"pidSvr":10,"idLoc":2,"idSvr":0,"pathLoc":"D:/Soft/image2","pathSvr":"E:/Web"},{"name":"img3","pidLoc":2,"pidSvr":10,"idLoc":3,"idSvr":0,"pathLoc":"D:/Soft/image2/img3","pathSvr":"E:/Web"}],"files":[{"name":"f1.exe","md5":"c4ca4238a0b923820dcc509a6f75849b","idLoc":0,"idSvr":0,"pidRoot":0,"pidLoc":1,"pidSvr":0,"length":"100","size":"100KB","pathLoc":"D:/soft/f1.exe","pathSvr":""},{"name":"f2.exe","md5":"c81e728d9d4c2f636f067f89cc14862c","idLoc":0,"idSvr":0,"pidRoot":0,"pidLoc":1,"pidSvr":0,"length":"100","size":"100KB","pathLoc":"D:/soft/f2.exe","pathSvr":""},{"name":"f3.exe","md5":"eccbc87e4b5ce2fe28308fd9f2a7baf3","idLoc":0,"idSvr":0,"pidRoot":0,"pidLoc":1,"pidSvr":0,"length":"100","size":"100KB","pathLoc":"D:/soft/f3.exe","pathSvr":""},{"name":"f4.rar","md5":"243c74ae1356b96783f9c356058ed569","idLoc":0,"idSvr":0,"pidRoot":0,"pidLoc":1,"pidSvr":0,"length":"100","size":"100KB","pathLoc":"D:/Soft/f4.rar","pathSvr":""}]}');
+			$("#folder").val(json);
+		});
+	</script>
+</head>
+<body>
+<form action="../db/fd_create.php" enctype="multipart/form-data" method="post">
+<textarea id="folder" name="folder" cols="100" rows="20"></textarea><br />
+<input id="uid" name="uid" value="1" />
+<input value="提交" type="submit" />
+</form>
+</body>
+</html>

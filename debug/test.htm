@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>测试页面</title>
+    <!--专门用来检查上传文件是否正常-->
+</head>
+<body>
+	<form action="db/ajax_process.php" method="post" enctype="multipart/form-data">
+	文件名称：<input name="FileName" type="file" /><br />
+	pathLocal：<input name="pathLocal" type="text" value="C:\www\web\upload\qq2012.exe" /><br />
+	FileSize：<input name="FileSize" type="text" value="1097"/><br />
+	MD5：<input name="md5" value="asdfasdf" /><br />
+	complete：<input name="complete" value="true" /><br />
+	RangePos:<input name="RangePos" value="0" /><br />
+	uid:<input name="uid" value="0" /><br />
+	fid:<input name="fid" value="0" /><br />
+	<input type="submit" value="上传" />
+	</form>
+</body>
+</html>

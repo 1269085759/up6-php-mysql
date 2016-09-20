@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../HttpUploader/jquery-1.3.2.min.js"></script>
+    <title>此页面用来测试ajax_f_create.php是否正常</title>
+	<script language="javascript" type="text/javascript">
+		$(document).ready(function ()
+		{
+			$("#pathLoc").val( encodeURIComponent('D:\\soft\\test.gif'));
+			$("#pathSvr").val( encodeURIComponent('E:\\soft\\test.gif'));
+		});
+	</script>
+</head>
+<body>
+	<form method="get" enctype="multipart/form-data" action="../db/f_create.php">
+	MD5：<input type="text" name="md5" value="098f6bcd4621d373cade4e832627b4f6" /><br />
+	UID：<input type="text" name="uid" value="0" /><br />
+	lenLoc：<input type="text" name="lenLoc" value="10" /><br />
+	sizeLoc：<input type="text" name="sizeLoc" value="10bytes" /><br />	
+    callback<input type="text" name="callback" value="callback" /><br />
+	fileLength(字节，例：1024)：<input type="text" name="fileLength" value="1097" /><br />
+	fileSize(格式化单位，例：5KB)：<input type="text" name="fileSize" value="1.07KB" /><br />
+	pathLocal(本地文件完整路径)：<input type="text" id="pathLoc" name="pathLocal" value="d:\\soft\\test.gif" /><a target="_blank" href="http://tool.chinaz.com/Tools/UTF-8.aspx">UTF8编码工具</a><br />
+	pathSvr(服务器路径)：<input type="text" id="pathSvr" name="pathSvr" value="E:\\soft\\test.gif" /><br />
+    remark：<input type="text" name="remark" value="remark_value" /><br />
+	<input type="submit" value="提交" />
+	</form>
+</body>
+</html>

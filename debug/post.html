@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>此页面用来测试ajax_post.aspx是否正常</title>
+</head>
+<body>
+	<form method="post" enctype="multipart/form-data" action="../db/f_post.php">
+	md5：<input type="text" name="md5" value="098f6bcd4621d373cade4e832627b4f6" /><br />
+	uid：<input type="text" name="uid" value="0" /><br />
+	fid：<input type="text" name="fid" value="1" /><br />
+	FileSize(字节，例：1024)：<input type="text" name="FileSize" value="1097" /><br />
+	RangePos(文件块起始位置)：<input type="text" name="RangePos" value="0" /><br />
+	文件：<input type="file" name="file" /><br />
+	<input type="submit" value="提交" />
+	</form>
+</body>
+</html>
