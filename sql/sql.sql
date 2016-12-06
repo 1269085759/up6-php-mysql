@@ -198,6 +198,7 @@ CREATE DEFINER=root@localhost PROCEDURE f_update(
  in _pid		int
 ,in _pidRoot	int
 ,in _fdTask tinyint
+,in _fdID		int
 ,in _fdChild tinyint
 ,in _uid		int
 ,in _nameLoc	varchar(255)
@@ -216,7 +217,8 @@ begin
 	update up6_files set
 	 f_pid		=_pid
 	,f_pidRoot	= _pidRoot
-,f_fdTask = _fdTask
+	,f_fdTask 	= _fdTask
+	,f_fdID		= _fdID
 	,f_fdChild	= _fdChild
 	,f_uid		= _uid
 	,f_nameLoc	= _nameLoc
