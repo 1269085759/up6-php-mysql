@@ -365,7 +365,7 @@ class DBFile
 		$sb = $sb . " from up6_files where f_id=:f_id limit 0,1";
 		
 		$db = new DbHelper();
-		$cmd =& $db->prepare_utf8($sb);
+		$cmd = $db->prepare_utf8($sb);
 		$cmd->bindParam(":f_id",$f_id);
 		$row = $db->ExecuteRow($cmd);
 
@@ -424,7 +424,7 @@ class DBFile
 
 		$db = &$this->db;
 		
-		$cmd =& $db->prepare_utf8($sb);
+		$cmd = $db->prepare_utf8($sb);
 		
 		$cmd->bindParam(":f_md5", $md5);
 		$row = $db->ExecuteRow($cmd);		
@@ -499,7 +499,7 @@ class DBFile
 		$sb = $sb . ") ";
 
 		$db = &$this->db;
-		$cmd =& $db->prepare_utf8( $sb );		
+		$cmd = $db->prepare_utf8( $sb );		
 		
 		$cmd->bindParam(":f_sizeLoc",$model->sizeLoc);
 		$cmd->bindValue(":f_pos",$model->FilePos,PDO::PARAM_INT);
