@@ -89,7 +89,8 @@ class xdb_files
 	var $filesComplete=0;
 	
 	function __construct()
-	{		
+	{
+		date_default_timezone_set("PRC");//fix(2016-12-06):在部分server中提示警告
 		$this->PostedTime = getdate();
 	}
 }
