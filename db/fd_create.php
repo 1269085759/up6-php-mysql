@@ -153,6 +153,7 @@ $arrFiles = array();
 
 //服务器已存在的文件
 $files_svr = $fd_writer->find_files($files);
+$files_svr_count = count($files_svr);
 
 //如果文件非常多可能执行超时
 set_time_limit(0);
@@ -180,7 +181,9 @@ foreach($files as $file)
 	$f->pathSvr		= $pb->genFile($f->uid, $f->md5,$f->nameLoc);
 
 	//存在相同文件
-	$f_exist = $files_svr[$f->md5];
+	$f_exist = NULL;
+	if($files_svr_count>0) $f_exist = $files_svr[$f->md5];
+	
 	if( !empty($f_exist) )
 	{
 		$f->lenSvr = $f_exist["f_lenSvr"];
