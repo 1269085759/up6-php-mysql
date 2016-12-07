@@ -167,7 +167,7 @@ foreach($files as $file)
 	$f->idLoc		= (int)$file["idLoc"];	
 	$f->lenLoc		= (int)$file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
-	//$f->perSvr 		= $file["perSvr"];
+	//$f->perSvr 	= $file["perSvr"];
 	$f->lenSvr		= intval($file["lenSvr"]);
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uidTxt);
@@ -191,11 +191,12 @@ foreach($files as $file)
 	
 	if( !empty($f_exist) )
 	{
-		$f->lenSvr = $f_exist["f_lenSvr"];
-		$f->perSvr = $f_exist["f_perSvr"];
+		$f->lenLoc 	= $f_exist["f_lenLoc"];
+		$f->lenSvr 	= $f_exist["f_lenSvr"];
+		$f->perSvr 	= $f_exist["f_perSvr"];
 		$f->pathSvr = $f_exist["f_pathSvr"];
 		$f->pathRel = $f_exist["f_pathRel"];
-		$f->postPos = $f_exist["f_FilePos"];
+		$f->postPos = $f_exist["f_pos"];
 		$f->complete = (bool)intval($f_exist["f_complete"]);
 		$f->nameSvr = $f_exist["f_nameSvr"];
 	}
