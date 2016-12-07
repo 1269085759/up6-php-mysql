@@ -76,7 +76,7 @@ class DBFolder
 		$db->ExecuteNonQuery($cmd);
 		
 		//fix:更新文件表
-		$sql = "update up6_files set f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
+		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
 		$cmd =& $db->GetCommand($sql);
 		$cmd->bindParam(":f_id",$id_f);
 		$cmd->bindParam(":f_uid",$uid);
