@@ -191,11 +191,12 @@ foreach($files as $file)
 	
 	if( !empty($f_exist) )
 	{
+		$f->lenLoc = $f_exist["f_lenLoc"];
 		$f->lenSvr = $f_exist["f_lenSvr"];
 		$f->perSvr = $f_exist["f_perSvr"];
 		$f->pathSvr = $f_exist["f_pathSvr"];
 		$f->pathRel = $f_exist["f_pathRel"];
-		$f->postPos = $f_exist["f_FilePos"];
+		$f->postPos = $f_exist["f_pos"];
 		$f->complete = (bool)intval($f_exist["f_complete"]);
 		$f->nameSvr = $f_exist["f_nameSvr"];
 	}
