@@ -13,8 +13,8 @@ class uc_builder
 		$f = new xdb_files();
         $f->uid       = $uid;
         $f->idSvr     = (int)$row["f_id"];
-        $f->f_fdTask  = (bool)$row["f_fdTask"];//r.getBoolean(3);
-        $f->f_fdID    = (int)$row["f_fdID"];//r.getInt(4);
+        $f->fdTask    = (bool)$row["f_fdTask"];//r.getBoolean(3);
+        $f->fdID      = (int)$row["f_fdID"];//r.getInt(4);
         $f->nameLoc   = $row["f_nameLoc"];//r.getString(7);
         $f->pathLoc   = $row["f_pathLoc"];//r.getString(8);
         $f->md5       = $row["f_md5"];//r.getString(9).trim();
@@ -87,10 +87,10 @@ class uc_builder
 		 
 		foreach ($this->files as $file)		
 		{
-			if ($file->f_fdTask)
+			if ($file->fdTask)
 			{
 				$fd = null;
-				$fdKey = strval($file->f_fdID);
+				$fdKey = strval($file->fdID);
 				if( array_key_exists($fdKey,$this->folders) )
 				{
 					$fd = $this->folders[$fdKey];

@@ -23,6 +23,7 @@ var HttpUploaderErrorCode = {
 	, "3": "域名未授权"
 	, "4": "文件大小超过限制"
 	, "5": "文件大小为0"
+	, "6": "文件被占用"
 };
 var up6_err_solve = {
     errFolderCreate: "请检查UrlFdCreate地址配置是否正确\n请检查浏览器缓存是否已更新\n请检查数据库是否创建\n请检查数据库连接配置是否正确"
@@ -278,7 +279,7 @@ function HttpUploaderMgr()
 		, "ResumerFile": function (fileSvr)//续传文件
 		{
 			//文件夹任务
-		    if (fileSvr.f_fdTask)
+		    if (fileSvr.fdTask)
 			{
 		        _this.ResumeFolder(fileSvr);
 			}
@@ -292,7 +293,7 @@ function HttpUploaderMgr()
 		}
 		, "RemoveFile": function (fileSvr)//删除文件
 		{
-		    if (fileSvr.f_fdTask)
+		    if (fileSvr.fdTask)
 		    {
 		        this.RemoveFolder(fileSvr);
 		        return;
@@ -324,8 +325,8 @@ function HttpUploaderMgr()
 				, dataType: 'jsonp'
 				, jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 				, url: this.Config["UrlFdDel"]
-				, data: { uid: fileSvr.uid, fid: fileSvr.f_fdID, time: new Date().getTime() }
-			    , success:function (msg){if (msg == 1){ui.empty();}}
+				, data: { uid: fileSvr.uid, fid: fileSvr.idSvr,fd_id:fileSvr.fdID, time: new Date().getTime() }
+			    , success:function (msg){if (msg.value == 1){ui.empty();}}
 			    , error: function () { alert("发送删除文件信息失败！"); }
 			    , complete: function (req, sta) { req = null; }
             });
@@ -495,7 +496,7 @@ function HttpUploaderMgr()
 	    var p = this.filesMap[json.id];
 	    p.md5_error(json);
 	};
-	this.load_complete = function (json) { this.nat_load = true; if (this.btnSetup) this.btnSetup.hide(); };
+	this.load_complete = function (json) { this.nat_load = true; this.btnSetup.hide(); };
 	this.recvMessage = function (str)
 	{
 	    var json = JSON.parse(str);
@@ -692,7 +693,7 @@ function HttpUploaderMgr()
 	//安装检查
 	this.setup_check = function ()
 	{
-	    if (!_this.browser.check()) {  }
+	    if (!_this.browser.check()) { this.btnSetup.show(); }
 	    else { this.btnSetup.hide(); }
 	};
 
@@ -1088,6 +1089,9 @@ function HttpUploaderMgr()
 	    var fdLoc = json;
 		//本地文件夹存在
 	    if (this.Exist(fdLoc.pathLoc)) return;
+	    //针对空文件夹的处理
+	    if (json.files == null) jQuery.extend(fdLoc,{files:{}});
+	    //if (json.lenLoc == 0) return;
 
 	    var idLoc = this.idCount++;
 		this.AppendQueue(idLoc);//添加到队列
@@ -1115,13 +1119,12 @@ function HttpUploaderMgr()
 		divMsg.text("");
 		//if(fdLoc.fdName != null) fdLoc.name = fdLoc.fdName;
 		uiName.text(fdLoc.nameLoc);
-		uiName.attr("title", fdLoc.nameLoc + "\n文件：" + fdLoc.filesCount + "\n文件夹：" + fdLoc.foldersCount + "\n大小：" + fdLoc.size);
-		uiSize.text(fdLoc.size);
+		uiName.attr("title", fdLoc.nameLoc + "\n文件：" + fdLoc.files.length + "\n文件夹：" + fdLoc.foldersCount + "\n大小：" + fdLoc.sizeLoc);
+		uiSize.text(fdLoc.sizeLoc);
 
 		var fdTask = new FolderUploader(idLoc, fdLoc, this);
 		this.filesMap[idLoc] = fdTask;//添加到映射表
 		fdTask.ui = ui_eles;
-		fdTask.pathLocal = fdLoc.pathLoc;//
 	    btnCancel.click(function()
 		{
 			fdTask.stop();
@@ -1160,11 +1163,10 @@ function HttpUploaderMgr()
 
 	this.ResumeFolder = function (fileSvr)
 	{
-	    var fdLoc = JSON.parse(fileSvr.fd_json);
-	    var fd = this.addFolderLoc(fdLoc);
+	    var fd = this.addFolderLoc(fileSvr);
 		fd.folderInit = true;
 	    //
-		if (null == fdLoc.files)
+		if (null == fileSvr.files)
 		{
 		    alert("文件为空");
 		    return;

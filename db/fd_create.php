@@ -105,9 +105,9 @@ $fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
 
 $fd_writer = new FdDataWriter();
 //分配文件和文件夹ID数
-$ids = $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1);
-$fd_ids = explode(",",$ids["ids_fd"]);
-$f_ids  = explode(",",$ids["ids_f"]);
+$ids 		= $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1);
+$fd_ids 	= explode(",",$ids["ids_fd"]);
+$f_ids  	= explode(",",$ids["ids_f"]);
 
 $fdroot->idSvr 	= array_shift($fd_ids);//取一个文件夹ID
 $fdroot->idFile = array_shift($f_ids);//取一个文件ID
@@ -126,7 +126,7 @@ $fd_writer->fd_update($fdroot);//更新文件夹数据
 $fd_writer->f_update_fd($fdroot);//更新文件数据
 
 $tbFolders = array();
-$tbFolders[$fdroot->idLoc] = $fdroot;
+$tbFolders["0"] = $fdroot;
 
 $arrFolders = array();
 
@@ -154,7 +154,7 @@ foreach($folders as $folder)
 	//更新文件夹数据
 	$fd_writer->fd_update($fd);
 	
-	$tbFolders[$fd->idLoc] = $fd;
+	$tbFolders[strval($fd->idLoc)] = $fd;
 	array_push($arrFolders,$fd);
 }
 
@@ -170,7 +170,8 @@ set_time_limit(0);
 //解析文件
 foreach($files as $file)
 {
-	$fd				= $tbFolders[ intval($file["pidLoc"]) ];			
+	$f_pidLoc		= strval($file["pidLoc"]);
+	$fd				= $tbFolders[ $f_pidLoc ];
 	$f				= new FileInf();
 	$f->nameLoc		= $file["nameLoc"];
 	$f->pathLoc		= $file["pathLoc"];
