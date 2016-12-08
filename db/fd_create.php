@@ -112,6 +112,16 @@ $f_ids  = explode(",",$ids["ids_f"]);
 $fdroot->idSvr 	= array_shift($fd_ids);//取一个文件夹ID
 $fdroot->idFile = array_shift($f_ids);//取一个文件ID
 
+//对空文件夹的处理，或0字节文件夹的处理
+if($fdroot->lenLoc == "0")
+{
+	$fdroot->complete = true;	
+}
+if(count($fdroot->files) == 0)
+{
+	$fdroot->complete = true;
+}
+
 $fd_writer->fd_update($fdroot);//更新文件夹数据
 $fd_writer->f_update_fd($fdroot);//更新文件数据
 
@@ -169,7 +179,14 @@ foreach($files as $file)
 	$f->sizeLoc		= $file["sizeLoc"];
 	//$f->perSvr	= $file["perSvr"];
 	$f->lenSvr		= intval($file["lenSvr"]);
-	$f->md5			= $file["md5"];
+	if(array_key_exists("md5",$file))
+	{
+		$f->md5		= $file["md5"];
+	}
+	else
+	{
+		$f->md5		= "";
+	}
 	$f->uid			= intval($uidTxt);
 	$f->pidRoot		= $fdroot->idSvr;
 	$f->pidSvr		= $fd->idSvr;

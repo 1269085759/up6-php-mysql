@@ -44,9 +44,23 @@ class FdDataWriter
 		$cmd->bindParam(":md5", $inf->md5);
 		$cmd->bindValue(":lenLoc", $inf->lenLoc,PDO::PARAM_INT);
 		$cmd->bindValue(":lenSvr", $inf->lenSvr,PDO::PARAM_INT);
-		$cmd->bindParam(":perSvr", $inf->perSvr);
+		if($inf->lenLoc > 0)
+		{
+			$cmd->bindParam(":perSvr", $inf->perSvr);	
+		}
+		else
+		{
+			$cmd->bindValue(":perSvr", "100%");
+		}
 		$cmd->bindParam(":sizeLoc", $inf->sizeLoc);
-		$cmd->bindValue(":complete", $inf->complete,PDO::PARAM_BOOL);
+		if($inf->lenLoc > 0)
+		{
+			$cmd->bindValue(":complete", $inf->complete,PDO::PARAM_BOOL);
+		}
+		else
+		{
+			$cmd->bindValue(":complete", true);
+		}
 		$cmd->bindValue(":id", $inf->idSvr,PDO::PARAM_INT);
 		if(!$cmd->execute())
 		{
@@ -210,9 +224,16 @@ class FdDataWriter
 		$ids = "0";
 		foreach($files as $f)
 		{
-			$ids = $ids ."," .$f["md5"];
+			if(strlen($f["md5"]) > 0)
+			{
+				$ids = $ids ."," .$f["md5"];
+			}
 		}
 		
+		if($ids == "0")
+		{
+			return $files;	
+		}
 		return $this->f_exist_batch( substr($ids,2) );
 	}	
 }
