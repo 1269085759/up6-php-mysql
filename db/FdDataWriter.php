@@ -232,7 +232,7 @@ class FdDataWriter
 		
 		if($ids == "0")
 		{
-			return new array();
+			return array();
 		}
 		return $this->f_exist_batch( substr($ids,2) );
 	}	
