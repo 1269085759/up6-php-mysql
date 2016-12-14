@@ -51,6 +51,7 @@ require('DbFolder.php');
 require('FileInf.php');
 require('xdb_files.php');
 require('PathTool.php');
+require('FileResumer.php');
 require('biz/PathBuilder.php');
 require('biz/PathMd5Builder.php');
 require('FolderInf.php');
@@ -117,10 +118,6 @@ $fdroot->idFile = array_shift($f_ids);//取一个文件ID
 if($fdroot->lenLoc == "0")
 {
 	$fdroot->complete = true;	
-}
-if(count($fdroot->files) == 0)
-{
-	$fdroot->complete = true;
 }
 
 $fd_writer->fd_update($fdroot);//更新文件夹数据
@@ -221,6 +218,10 @@ foreach($files as $file)
 	}
 	$f->idSvr = intval( array_shift($f_ids) );//取一个文件ID
 	$fd_writer->f_update($f);//更新文件数据
+	
+	//创建文件
+	$fr = new FileResumer();
+	$fr->CreateFile($f->pathSvr);
 	
 	//fix:防止json_encode将汉字转换成unicode
 	$f->nameLoc		= PathTool::urlencode_safe($f->nameLoc);
