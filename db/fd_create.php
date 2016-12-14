@@ -102,6 +102,7 @@ $fdroot->pathSvr 	= $jsonArr["pathSvr"];
 $fdroot->pathLoc 	= $jsonArr["pathLoc"];
 $fdroot->filesCount = (int)$jsonArr["filesCount"];//
 $fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
+$fdroot->complete	= $jsonArr["complete"];  
 
 $fd_writer = new FdDataWriter();
 //分配文件和文件夹ID数
@@ -233,7 +234,7 @@ foreach($files as $file)
 //转换为JSON
 $fdroot->folders = $arrFolders;
 $fdroot->files = $arrFiles;
-$fdroot->complete = false;
+//$fdroot->complete = false;
 $json = json_encode($fdroot);//bug:汉字被编码成了unicode
 $json = urldecode( $json );//还原汉字
 
