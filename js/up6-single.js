@@ -428,15 +428,20 @@ function HttpUploaderMgr()
 	{
 	    var html 		= this.GetHtml();
 	    var dom 		= $(document.body).append(html);
-	    this.initUI(dom);
+        $(function () {
+            _this.initUI(dom);
+        });
+		
 	};
 
 	//加截容器，上传面板，文件列表面板
 	this.loadTo = function (oid)
 	{
 	    var html 		= this.GetHtml();
-		var dom 		= $("#"+oid).html(html);
-		this.initUI(dom);
+        var dom = $("#" + oid).html(html);
+        $(function () {
+            _this.initUI(dom);
+        });		
 	};
 	
 	this.initUI = function (dom)
@@ -453,16 +458,35 @@ function HttpUploaderMgr()
     //oid,显示上传项的层ID
 	this.postAuto = function (oid)
 	{
-	    if (this.fileCur != null) return;//有上传项
-	    this.uiContainer = $("#" + oid);
-	    this.browser.openFiles();
+		var file_free = this.fileCur != null;
+		if(file_free)
+		{
+			file_free = this.fileCur.State == HttpUploaderState.Complete;
+			if(!file_free) file_free = this.fileCur.State == HttpUploaderState.Error;			
+		}		
+		if(this.fileCur == null) file_free = true;
+		if(file_free)
+		{
+			this.uiContainer = $("#" + oid);
+			this.browser.openFiles();
+		}
 	};
 	
 	//上传文件
 	this.postLoc = function (path_loc, oid)
 	{
-	    this.uiContainer = $("#" + oid);
-	    this.browser.addFile({ pathLoc: path_loc });
+		var file_free = this.fileCur != null;
+		if(file_free)
+		{
+			file_free = this.fileCur.State == HttpUploaderState.Complete;
+			if(!file_free) file_free = this.fileCur.State == HttpUploaderState.Error;			
+		}		
+		if(this.fileCur == null) file_free = true;
+		if(file_free)
+		{
+		    this.uiContainer = $("#" + oid);
+		    this.browser.addFile({ pathLoc: path_loc });
+		}
 	};
     
 	this.addFileLoc = function(fileLoc)
@@ -470,8 +494,13 @@ function HttpUploaderMgr()
 		var idLoc = this.idCount++;
 		var nameLoc = fileLoc.nameLoc;
 
-		var ui = _this.fileItem.clone();//文件信息
-		_this.uiContainer.append(ui);//添加文件信息
+		var ui = null;
+		if(this.fileCur != null) ui = this.fileCur.ui.div;
+		if(ui == null)
+		{
+			ui = _this.fileItem.clone();//文件信息
+			_this.uiContainer.append(ui);//添加文件信息
+		}
 		ui.css("display", "block");
 
 		var uiName      = ui.find("div[name='fileName']");
