@@ -168,28 +168,42 @@ select
 	 where f_md5 = _md5
 	 order by f_lenSvr desc limit 1$$
 
-CREATE DEFINER=root@localhost PROCEDURE f_exist_batch(
-	in _md5s varchar(1000)
+CREATE PROCEDURE fd_files_check(
+	in md5s mediumtext	/*md5列表:a,b,c,d。如果长度不够可以换更大的数据类型：longtext*/
+   ,in md5_len int /*单个MD5长度*/
+   ,in md5s_len	int /*md5字符串总长度*/
 )
-select 
-	 f_id
-	,f_uid
-	,f_nameLoc
-	,f_nameSvr
-	,f_pathLoc
-	,f_pathSvr
-	,f_pathRel
-	,f_lenLoc
-	,f_sizeLoc
-	,f_pos
-	,f_lenSvr
-	,f_perSvr
-	,f_complete
-	,f_time
-	,f_deleted
-,f_md5
-	 from up6_files
-	 where find_in_set (f_md5,_md5s )$$
+BEGIN
+	/*拆分md5*/
+	declare md5_item varchar(40);
+	declare md5_cur int;
+	declare split_pos int;/*当前分割符位置*/
+	create temporary table if not exists t_md5 /*不存在则创建临时表  */
+         (  
+           md5 varchar(40) primary key
+         )engine=memory;
+    truncate TABLE t_md5;  /*使用前先清空临时表*/
+	
+	set md5_cur = 0;
+	set split_pos = position("," in md5s);
+
+	/*有多个md5*/
+	if md5s_len > md5_len then	
+		while md5_cur < md5s_len do
+			set md5_item = substring(md5s,md5_cur+1,md5_len);
+			insert into t_md5(md5) values(md5_item);
+			set md5_cur = md5_cur + md5_len + 1;
+		end while;	
+	else/*只有一个md5*/
+		insert into t_md5(md5) values(md5s);
+	end if;
+
+	/*查询数据库*/
+	select *
+	from (select * from up6_files where f_id in (select max(f_id) from up6_files group by f_md5))fs
+	inner join t_md5 t
+	on t.md5 = fs.f_md5 ;
+end$$
 
 CREATE DEFINER=root@localhost PROCEDURE f_process(in posSvr bigint(19),in lenSvr bigint(19),in perSvr varchar(6),in uidSvr int,in fidSvr int,in complete tinyint)
 update up6_files set f_pos=posSvr,f_lenSvr=lenSvr,f_perSvr=perSvr,f_complete=complete where f_uid=uidSvr and f_id=fidSvr$$

@@ -199,12 +199,16 @@ class FdDataWriter
 	 * 使用独立连接
 	 * $md5s a,b,c,d,e,f,g
 	 * */
-	function f_exist_batch($md5s)
+	function fd_files_check($md5s)
 	{
 		$con = $this->db->GetConUtf8();
-		$cmd = $con->prepare("call f_exist_batch(:md5s)");	
+		$cmd = $con->prepare("call fd_files_check(:md5s
+				,:md5_len
+				,:md5s_len)");	
 		//$cmd = &$this->cmd_f_exist;
 		$cmd->bindParam(":md5s", $md5s);
+		$cmd->bindValue(":md5_len", 40);
+		$cmd->bindParam(":md5s_len", strlen($md5s));
 		$cmd->execute();
 		$rows = $cmd->fetchAll(PDO::FETCH_ASSOC);
 		$files = array();
@@ -234,7 +238,7 @@ class FdDataWriter
 		{
 			return array();
 		}
-		return $this->f_exist_batch( substr($ids,2) );
+		return $this->fd_files_check( substr($ids,2) );
 	}	
 }
 ?>
