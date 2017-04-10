@@ -199,7 +199,7 @@ class FdDataWriter
 	 * 使用独立连接
 	 * $md5s a,b,c,d,e,f,g
 	 * */
-	function fd_files_check($md5s)
+	function fd_files_check($md5s,$md5Len)
 	{
 		$con = $this->db->GetConUtf8();
 		$cmd = $con->prepare("call fd_files_check(:md5s
@@ -207,8 +207,8 @@ class FdDataWriter
 				,:md5s_len)");	
 		//$cmd = &$this->cmd_f_exist;
 		$cmd->bindParam(":md5s", $md5s);
-		$cmd->bindValue(":md5_len", 40);
-		$cmd->bindParam(":md5s_len", strlen($md5s));
+		$cmd->bindValue(":md5_len", $md5Len);
+		$cmd->bindValue(":md5s_len", strlen($md5s));
 		$cmd->execute();
 		$rows = $cmd->fetchAll(PDO::FETCH_ASSOC);
 		$files = array();
@@ -226,10 +226,12 @@ class FdDataWriter
 	function find_files(&$files/**/)
 	{
 		$ids = "0";
+		$md5Len = 32;//md5长度为32
 		foreach($files as $f)
 		{
 			if(strlen($f["md5"]) > 0)
 			{
+				$md5Len = strlen($f["md5"]);
 				$ids = $ids ."," .$f["md5"];
 			}
 		}
@@ -238,7 +240,7 @@ class FdDataWriter
 		{
 			return array();
 		}
-		return $this->fd_files_check( substr($ids,2) );
+		return $this->fd_files_check( substr($ids,2) ,$md5Len);
 	}	
 }
 ?>
