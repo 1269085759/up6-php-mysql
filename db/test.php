@@ -27,7 +27,7 @@ $fd_writer = new FdDataWriter();
 	//$ids = $fd_writer->fd_files_add_batch(100,100);//批量添加数据
 	//var_dump($ids["ids_f"]);
 	
-	$ret = $fd_writer->f_exist_batch("e4e4a7ac881acecf369e9f1106bff547,073f8b6a6ae6fed73faccdfa836e3790");
+	$ret = $fd_writer->fd_files_check("15736b6273683faf0eb6733beb03e2e1,689e7e4c2c2cc3588f9e73ac82c2423b");
 	var_dump($ret);
 	echo "<br/>";
 	
