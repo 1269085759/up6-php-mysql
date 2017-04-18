@@ -94,7 +94,7 @@ if( !empty($jsonArr["files"]) )
 
 //将$jsonArr赋值给$fdroot
 $fdroot 			= new FolderInf();
-$fdroot->nameLoc	= $jsonArr["nameLoc"];
+$fdroot->nameLoc	= PathTool::to_utf8( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
@@ -104,13 +104,13 @@ $fdroot->idLoc 		= 0;//idLoc设为0
 $fdroot->idSvr 		= 0;//idSvr设为0
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
-$fdroot->pathLoc 	= $jsonArr["pathLoc"];
+$fdroot->pathLoc 	= PathTool::to_utf8( $jsonArr["pathLoc"] );
 $fdroot->filesCount = (int)$jsonArr["filesCount"];//
 $fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
 
 //创建文件夹
 $pb = new PathUuidBuilder();
-$fdroot->pathSvr = $pb->genFolder($uid, $fdroot);
+$fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
 $fd_writer = new FdDataWriter();
 //分配文件，文件夹ID
@@ -118,8 +118,8 @@ $ids = $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1)
 $fd_ids = explode(",",$ids["ids_fd"]);
 $f_ids  = explode(",",$ids["ids_f"]);
 
-$fdroot->idSvr 	= array_shift($fd_ids);//取一个文件夹ID
-$fdroot->idFile = array_shift($f_ids);//取一个文件ID
+$fdroot->idSvr 	= (int)array_shift($fd_ids);//取一个文件夹ID
+$fdroot->idFile = (int)array_shift($f_ids);//取一个文件ID
 
 $fd_writer->fd_update($fdroot);//更新文件夹数据
 $fd_writer->f_update_fd($fdroot);//更新文件数据
@@ -133,7 +133,7 @@ $arrFolders = array();
 foreach($folders as $folder)
 {
 	$fd 			= new FolderInf();
-	$fd->nameLoc	= $folder["nameLoc"];
+	$fd->nameLoc	= PathTool::to_utf8( $folder["nameLoc"] );
 	$fd->idLoc 		= (int)$folder["idLoc"];
 	$fd->idSvr 		= (int)$folder["idSvr"];
 	$fd->pidRoot 	= 0;//
@@ -142,7 +142,7 @@ foreach($folders as $folder)
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
 	//$fd->size		= $folder["size"];
-	$fd->pathLoc	= $folder["pathLoc"];
+	$fd->pathLoc	= PathTool::to_utf8( $folder["pathLoc"] );
 			
 	//创建层级结构
 	$fdParent = $tbFolders[strval($fd->pidLoc)];		
@@ -202,6 +202,9 @@ foreach($files as $file)
 }
 
 //转换为JSON
+$fdroot->nameLoc = PathTool::urlencode_path($fdroot->nameLoc);
+$fdroot->pathLoc = PathTool::urlencode_path($fdroot->pathLoc);
+$fdroot->pathSvr = PathTool::urlencode_path($fdroot->pathSvr);
 $fdroot->folders = $arrFolders;
 $fdroot->files = $arrFiles;
 $fdroot->complete = false;
