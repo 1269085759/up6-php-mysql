@@ -100,8 +100,8 @@ $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->pidLoc 	= 0;
 $fdroot->pidSvr 	= 0;
-$fdroot->idLoc 		= (int)$jsonArr["idLoc"];
-$fdroot->idSvr 		= (int)$jsonArr["idSvr"];
+$fdroot->idLoc 		= 0;//idLoc设为0
+$fdroot->idSvr 		= 0;//idSvr设为0
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
 $fdroot->pathLoc 	= $jsonArr["pathLoc"];
@@ -126,7 +126,7 @@ $fd_writer->f_update_fd($fdroot);//更新文件数据
 
 
 $tbFolders = array();
-$tbFolders[strval($fdroot->idLoc)] = $fdroot;
+$tbFolders["0"] = $fdroot;//根目录0
 
 $arrFolders = array();
 //解析文件夹
