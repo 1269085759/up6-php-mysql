@@ -40,6 +40,7 @@ header('Content-Type: text/html;charset=utf-8');
 		2014-09-15 修复设置子文件，子文件夹层级结构错误的问题。
 		2016-04-13 从uuid模式创建文件夹
 		2016-05-29 优化数据库操作逻辑，将文件，文件夹操作改为批量操作，提高效率。
+		2017-04-18 完善对中文目录和文件的支持。
 
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
