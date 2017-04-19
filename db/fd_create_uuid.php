@@ -40,6 +40,7 @@ header('Content-Type: text/html;charset=utf-8');
 		2014-09-15 修复设置子文件，子文件夹层级结构错误的问题。
 		2016-04-13 从uuid模式创建文件夹
 		2016-05-29 优化数据库操作逻辑，将文件，文件夹操作改为批量操作，提高效率。
+		2017-04-19 完善对中文的支持。
 
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
@@ -94,23 +95,23 @@ if( !empty($jsonArr["files"]) )
 
 //将$jsonArr赋值给$fdroot
 $fdroot 			= new FolderInf();
-$fdroot->nameLoc	= $jsonArr["nameLoc"];
+$fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->pidLoc 	= 0;
 $fdroot->pidSvr 	= 0;
-$fdroot->idLoc 		= (int)$jsonArr["idLoc"];
-$fdroot->idSvr 		= (int)$jsonArr["idSvr"];
+$fdroot->idLoc 		= 0;//初始化时，控件中顶级目录idLoc为0
+$fdroot->idSvr 		= 0;//初始化时，idSvr为0
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
-$fdroot->pathLoc 	= $jsonArr["pathLoc"];
+$fdroot->pathLoc 	= PathTool::unicode_decode( $jsonArr["pathLoc"] );
 $fdroot->filesCount = (int)$jsonArr["filesCount"];//
 $fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
 
 //创建文件夹
 $pb = new PathUuidBuilder();
-$fdroot->pathSvr = $pb->genFolder($uid, $fdroot);
+$fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
 $fd_writer = new FdDataWriter();
 //分配文件，文件夹ID
@@ -118,8 +119,8 @@ $ids = $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1)
 $fd_ids = explode(",",$ids["ids_fd"]);
 $f_ids  = explode(",",$ids["ids_f"]);
 
-$fdroot->idSvr 	= array_shift($fd_ids);//取一个文件夹ID
-$fdroot->idFile = array_shift($f_ids);//取一个文件ID
+$fdroot->idSvr 	= (int)array_shift($fd_ids);//取一个文件夹ID
+$fdroot->idFile = (int)array_shift($f_ids);//取一个文件ID
 
 $fd_writer->fd_update($fdroot);//更新文件夹数据
 $fd_writer->f_update_fd($fdroot);//更新文件数据
@@ -133,7 +134,7 @@ $arrFolders = array();
 foreach($folders as $folder)
 {
 	$fd 			= new FolderInf();
-	$fd->nameLoc	= $folder["nameLoc"];
+	$fd->nameLoc	= PathTool::unicode_decode( $folder["nameLoc"] );
 	$fd->idLoc 		= (int)$folder["idLoc"];
 	$fd->idSvr 		= (int)$folder["idSvr"];
 	$fd->pidRoot 	= 0;//
@@ -142,7 +143,7 @@ foreach($folders as $folder)
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
 	//$fd->size		= $folder["size"];
-	$fd->pathLoc	= $folder["pathLoc"];
+	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
 			
 	//创建层级结构
 	$fdParent = $tbFolders[strval($fd->pidLoc)];		
@@ -170,9 +171,9 @@ foreach($files as $file)
 	$pidFD			= $tbFolders[ strval($file["pidLoc"]) ];
 			
 	$f				= new FileInf();
-	$f->nameLoc		= $file["nameLoc"];
-	$f->nameSvr		= $file["nameLoc"];
-	$f->pathLoc		= $file["pathLoc"];
+	$f->nameLoc		= PathTool::unicode_decode( $file["nameLoc"] );
+	$f->nameSvr		= $f->nameLoc;
+	$f->pathLoc		= PathTool::unicode_decode( $file["pathLoc"] );
 	$f->idLoc		= (int)$file["idLoc"];	
 	$f->lenLoc		= (int)$file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
@@ -201,10 +202,24 @@ foreach($files as $file)
 	array_push($arrFiles,$f);
 }
 
+//fix(2017-04-19):防止中文被转换为unicode
+$fdroot->nameLoc = PathTool::urlencode_safe($fdroot->nameLoc);
+$fdroot->pathLoc = PathTool::urlencode_safe($fdroot->pathLoc);
+$fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
+//fix:防止子目录汉字被转换成unicode
+foreach($arrFolders as $fd)
+{
+	$fd->nameLoc = PathTool::urlencode_safe($fd->nameLoc);
+	$fd->pathSvr = PathTool::urlencode_safe($fd->pathSvr);
+	$fd->pathLoc = PathTool::urlencode_safe($fd->pathLoc);
+	$fd->pathRel = PathTool::urlencode_safe($fd->pathRel);
+}
 //转换为JSON
 $fdroot->folders = $arrFolders;
 $fdroot->files = $arrFiles;
 $fdroot->complete = false;
+//fix(2017-04-19):增加对空文件夹的处理
+if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
 $json = json_encode($fdroot);//bug:汉字被编码成了unicode
 $json = urldecode( $json );
 

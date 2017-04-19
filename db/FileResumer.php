@@ -49,6 +49,11 @@ class FileResumer
 	function CreateFile($path)
 	{
 		$path = iconv( "UTF-8","GB2312",$path);
+		
+		//创建层级目录
+		$fd = dirname($path);
+		if( !is_dir($fd)) mkdir($fd,0777,true);
+		
 		$hfile = fopen($path,"wb");
 		//不再按实际文件大小创建文件，而是创建一个小文件，减少用户上传等待的时间。
 		ftruncate($hfile,0);
