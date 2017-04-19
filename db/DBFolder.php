@@ -71,15 +71,15 @@ class DBFolder
 		$sql = "update up6_folders set fd_complete=1 where fd_id=:fd_id and fd_uid=:fd_uid;";		
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
-		$cmd->bindParam(":fd_id",$id_fd);
-		$cmd->bindParam(":fd_uid",$uid);
+		$cmd->bindValue(":fd_id",$id_fd);
+		$cmd->bindValue(":fd_uid",$uid);
 		$db->ExecuteNonQuery($cmd);
 		
 		//fix:更新文件表
 		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
 		$cmd =& $db->GetCommand($sql);
-		$cmd->bindParam(":f_id",$id_f);
-		$cmd->bindParam(":f_uid",$uid);
+		$cmd->bindValue(":f_id",$id_f);
+		$cmd->bindValue(":f_uid",$uid);
 		$db->ExecuteNonQuery($cmd);		
 	}
 

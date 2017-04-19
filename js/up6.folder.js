@@ -156,7 +156,7 @@ function FolderUploader(idLoc, fdLoc, mgr)
 			, dataType: 'jsonp'
 			, jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 			, url: this.Config["UrlFdComplete"]
-			, data: { uid: this.fields["uid"], id_folder: this.folderSvr.fdID,id_file:this.folderSvr.idFile, time: new Date().getTime() }
+			, data: { uid: this.fields["uid"], id_folder: this.folderSvr.idSvr,id_file:this.folderSvr.idFile, time: new Date().getTime() }
 			, success: function (msg)
 			{
 			    //添加到文件列表

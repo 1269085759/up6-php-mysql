@@ -98,7 +98,8 @@ class FdDataWriter
 		$cmd->bindValue(":lenSvr", 0,PDO::PARAM_INT);
 		$cmd->bindValue(":perSvr", "0%");
 		$cmd->bindParam(":sizeLoc", $fd->size);
-		$cmd->bindValue(":complete", false,PDO::PARAM_BOOL);
+		$cmp = $fd->lenLoc == 0;//fix(2017-04-19):增加对空文件夹的处理
+		$cmd->bindValue(":complete", $cmp,PDO::PARAM_BOOL);
 		$cmd->bindValue(":id", $fd->idFile,PDO::PARAM_INT);
 		if(!$cmd->execute())
 		{

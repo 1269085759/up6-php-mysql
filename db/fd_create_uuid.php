@@ -95,7 +95,7 @@ if( !empty($jsonArr["files"]) )
 
 //将$jsonArr赋值给$fdroot
 $fdroot 			= new FolderInf();
-$fdroot->nameLoc	= PathTool::to_utf8( $jsonArr["nameLoc"] );
+$fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
@@ -105,7 +105,7 @@ $fdroot->idLoc 		= 0;//idLoc设为0
 $fdroot->idSvr 		= 0;//idSvr设为0
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
-$fdroot->pathLoc 	= PathTool::to_utf8( $jsonArr["pathLoc"] );
+$fdroot->pathLoc 	= PathTool::unicode_decode( $jsonArr["pathLoc"] );
 $fdroot->filesCount = (int)$jsonArr["filesCount"];//
 $fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
 
@@ -134,7 +134,7 @@ $arrFolders = array();
 foreach($folders as $folder)
 {
 	$fd 			= new FolderInf();
-	$fd->nameLoc	= PathTool::to_utf8( $folder["nameLoc"] );
+	$fd->nameLoc	= PathTool::unicode_decode( $folder["nameLoc"] );
 	$fd->idLoc 		= (int)$folder["idLoc"];
 	$fd->idSvr 		= (int)$folder["idSvr"];
 	$fd->pidRoot 	= 0;//
@@ -143,7 +143,7 @@ foreach($folders as $folder)
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
 	//$fd->size		= $folder["size"];
-	$fd->pathLoc	= PathTool::to_utf8( $folder["pathLoc"] );
+	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
 			
 	//创建层级结构
 	$fdParent = $tbFolders[strval($fd->pidLoc)];		
@@ -171,9 +171,9 @@ foreach($files as $file)
 	$pidFD			= $tbFolders[ strval($file["pidLoc"]) ];
 			
 	$f				= new FileInf();
-	$f->nameLoc		= $file["nameLoc"];
-	$f->nameSvr		= $file["nameLoc"];
-	$f->pathLoc		= $file["pathLoc"];
+	$f->nameLoc		= PathTool::unicode_decode( $file["nameLoc"] );
+	$f->nameSvr		= $f->nameLoc;
+	$f->pathLoc		= PathTool::unicode_decode( $file["pathLoc"] );
 	$f->idLoc		= (int)$file["idLoc"];	
 	$f->lenLoc		= (int)$file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
@@ -203,12 +203,24 @@ foreach($files as $file)
 }
 
 //转换为JSON
-$fdroot->nameLoc = PathTool::urlencode_path($fdroot->nameLoc);
-$fdroot->pathLoc = PathTool::urlencode_path($fdroot->pathLoc);
-$fdroot->pathSvr = PathTool::urlencode_path($fdroot->pathSvr);
+$fdroot->nameLoc = PathTool::urlencode_safe($fdroot->nameLoc);
+$fdroot->pathLoc = PathTool::urlencode_safe($fdroot->pathLoc);
+$fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
+//fix:防止子目录汉字被转换成unicode
+foreach($arrFolders as $fd)
+{
+    $fd->nameLoc = PathTool::urlencode_safe($fd->nameLoc);
+    $fd->pathSvr = PathTool::urlencode_safe($fd->pathSvr);
+    $fd->pathLoc = PathTool::urlencode_safe($fd->pathLoc);
+    $fd->pathRel = PathTool::urlencode_safe($fd->pathRel);
+}
+
 $fdroot->folders = $arrFolders;
 $fdroot->files = $arrFiles;
 $fdroot->complete = false;
+//fix(2017-04-19):增加对空文件夹的处理
+if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
+
 $json = json_encode($fdroot);//bug:汉字被编码成了unicode
 $json = urldecode( $json );
 

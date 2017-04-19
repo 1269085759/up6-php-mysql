@@ -59,7 +59,7 @@ class PathTool
 		return iconv($encode, "GB2312", $str);
 	}
 	
-	function unicode_decode($str)
+	static function unicode_decode($str)
 	{
 		return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',
 				create_function(
