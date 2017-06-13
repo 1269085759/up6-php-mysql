@@ -20,6 +20,7 @@ $perSvr			= $_POST["perSvr"];
 $lenSvr			= $_POST["lenSvr"];
 $lenLoc			= $_POST["lenLoc"];
 $f_pos			= $_POST["RangePos"];
+$rangeSize		= $_POST["rangeSize"];
 $complete		= $_POST["complete"];
 $fd_idSvr = "";
 if(!empty($_POST["fd-idSvr"]) )	$fd_idSvr = $_POST["fd-idSvr"];
