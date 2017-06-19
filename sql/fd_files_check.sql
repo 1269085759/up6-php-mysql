@@ -1,10 +1,9 @@
-/*
- * 更新
- * 	2017-04-10 添加
- * */
-drop procedure if exists fd_files_check;
-DELIMITER $$
-/* =============================================
+/*--
+-- 更新
+-- 	2017-04-10 添加
+--
+--drop procedure if exists fd_files_check;
+-- =============================================
 -- Author:        zysoft
 -- Create date: 2016-08-04
 -- Description:    批量查询相同MD5的文件
@@ -43,5 +42,4 @@ BEGIN
     from (select * from up6_files where f_id in (select max(f_id) from up6_files group by f_md5))fs
     inner join t_md5 t
     on t.md5 = fs.f_md5 ;
-END$$
-DELIMITER;/*--5.7.9版本MySQL必须加这一句，否则包含多条SQL语句的存储过程无法创建成功*/
+END

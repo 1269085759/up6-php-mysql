@@ -1,6 +1,4 @@
-
---更新文件
-DELIMITER $$
+/*更新文件*/
 CREATE PROCEDURE f_update(		
  in _pid		int
 ,in _pidRoot	int
@@ -39,5 +37,4 @@ begin
 	,f_sizeLoc	= _sizeLoc
 	,f_complete	= _complete
 	where f_id = _id;		
-end$$
-DELIMITER;/*--5.7.9版本MySQL必须加这一句，否则包含多条SQL语句的存储过程无法创建成功*/
+end

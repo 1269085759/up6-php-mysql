@@ -1,5 +1,4 @@
---更新文件夹
-DELIMITER $$
+/*更新文件夹*/
 CREATE PROCEDURE fd_update(		
  in _name			varchar(50)
 ,in _pid			int
@@ -35,5 +34,4 @@ begin
 	,fd_pathRel			= _pathRel
 	where 
 	fd_id = _id;		
-end$$
-DELIMITER;/*--5.7.9版本MySQL必须加这一句，否则包含多条SQL语句的存储过程无法创建成功*/
+end
