@@ -1,5 +1,4 @@
 /*批量添加文件和文件夹*/
-DELIMITER $$
 CREATE PROCEDURE fd_add_batch(
  in fCount int	/*文件总数，由外部+1，表示单独增加一个文件夹*/
 ,in uid int		/*用户ID*/
@@ -18,5 +17,4 @@ begin
 	set f_ids = substring(f_ids,3);/*删除0,*/
 	
 	select f_ids;
-end$$
-DELIMITER;/*--5.7.9版本MySQL必须加这一句，否则包含多条SQL语句的存储过程无法创建成功*/
+end
