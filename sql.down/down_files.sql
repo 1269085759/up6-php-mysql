@@ -1,4 +1,3 @@
-/*--drop table down_files*/
 CREATE TABLE down_files
 (
  f_id      		int(11) NOT NULL auto_increment    
