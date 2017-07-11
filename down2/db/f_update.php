@@ -1,5 +1,5 @@
 <?php 
-require('../../db/DbHelper.php');
+require('../../db/database/DbHelper.php');
 require('../model/DnFileInf.php');
 require('DnFile.php');
 

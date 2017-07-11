@@ -1,5 +1,5 @@
 <?php
-require('../../db/DbHelper.php');
+require('../../db/database/DbHelper.php');
 require('../../db/PathTool.php');
 require('../model/DnFileInf.php');
 require('../biz/cmp_file.php');

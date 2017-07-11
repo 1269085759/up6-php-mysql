@@ -6,7 +6,7 @@
 */
 
 require('../../db/inc.php');
-require('../../db/DbHelper.php');
+require('../../db/database/DbHelper.php');
 require('DnFile.php');
 
 $db = new DnFile();

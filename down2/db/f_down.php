@@ -1,7 +1,7 @@
 <?php
-require('../../db/DbHelper.php');
+require('../../db/database/DbHelper.php');
 require('../../db/xdb_files.php');
-require('../../db/DBFile.php');
+require('../../db/database/DBFile.php');
 require('../../db/PathTool.php');
 
 $fid = $_GET["fid"];

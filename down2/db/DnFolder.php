@@ -5,7 +5,7 @@
 		2016-07-31 创建
 */
 require('../../db/inc.php');
-require('../../db/DbHelper.php');
+require('../../db/database/DbHelper.php');
 class DnFolder
 {	
 	var $db;//全局数据库连接,共用数据库连接
