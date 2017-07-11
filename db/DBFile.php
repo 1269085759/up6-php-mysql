@@ -800,19 +800,17 @@ class DBFile
 	///<param name="f_pos">文件位置，大小可能超过2G，所以需要使用long保存</param>
 	///<param name="f_lenSvr">已上传长度，文件大小可能超过2G，所以需要使用long保存</param>
 	///<param name="f_perSvr">已上传百分比</param>
-	function f_process($f_uid,$f_id,$f_pos,$f_lenSvr,$f_perSvr,$complete)
+	function f_process($uid,$id,$offset,$lenSvr,$perSvr)
 	{
-		//$sql = "update up6_files set f_pos=?,f_lenSvr=?,f_perSvr=? where f_uid=? and f_id=?";
-		$sql = "call f_process(:pos,:len,:per,:uid,:id,:cmp)";//使用存储过程
+		$sql = "update up6_files set f_pos=:pos,f_lenSvr=:len,f_perSvr=:per where f_uid=:uid and f_id=:id";		
 		$db = &$this->db;
 		$cmd =& $db->GetCommand($sql);
 		
-		$cmd->bindParam(":pos",$f_pos);
-		$cmd->bindParam(":len",$f_lenSvr);
-		$cmd->bindParam(":per",$f_perSvr);
-		$cmd->bindParam(":uid",$f_uid);
-		$cmd->bindParam(":id",$f_id);
-		$cmd->bindParam(":cmp",$complete,PDO::PARAM_BOOL);//fix(2016-05-26)
+		$cmd->bindParam(":pos",$offset);
+		$cmd->bindParam(":len",$lenSvr);
+		$cmd->bindParam(":per",$perSvr);
+		$cmd->bindParam(":uid",$uid);
+		$cmd->bindParam(":id",$id);
 
 		$db->ExecuteNonQuery($cmd);
 		return true;
