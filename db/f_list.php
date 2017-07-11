@@ -4,9 +4,9 @@ header('Content-Type: text/html;charset=utf-8');
 /*
 	列表出所文件列表，包括未上传完成的，以JSON方式返回给客户端JS。
 */
-require('xdb_files.php');
-require('FileInf.php');
-require('FolderInf.php');
+require('model/xdb_files.php');
+require('model/FileInf.php');
+require('model/FolderInf.php');
 require('database/DbHelper.php');
 require('database/DbFile.php');
 require('database/DBFolder.php');

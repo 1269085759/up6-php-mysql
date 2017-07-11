@@ -46,18 +46,18 @@ header('Content-Type: text/html;charset=utf-8');
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
 */
 require('database/DbHelper.php');
-require('inc.php');
+require('utils/inc.php');
 require('database/DBFile.php');
 require('database/DbFolder.php');
-require('FileInf.php');
-require('xdb_files.php');
-require('PathTool.php');
-require('FileResumer.php');
+require('model/FileInf.php');
+require('model/xdb_files.php');
+require('utils/PathTool.php');
+require('utils/FileResumer.php');
 require('biz/PathBuilder.php');
 require('biz/PathMd5Builder.php');
-require('FolderInf.php');
+require('model/FolderInf.php');
 require('biz/PathUuidBuilder.php');
-require('FdDataWriter.php');
+require('utils/FdDataWriter.php');
 
 $jsonTxt = $_POST["folder"];
 $uid 	 = $_POST["uid"];

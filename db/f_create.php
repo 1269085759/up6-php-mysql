@@ -17,10 +17,10 @@ header('Content-type: text/html;charset=utf-8');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
-require('xdb_files.php');
-require('FileResumer.php');
-require('FolderInf.php');
-require('PathTool.php');
+require('model/xdb_files.php');
+require('model/FolderInf.php');
+require('utils/FileResumer.php');
+require('utils/PathTool.php');
 require('biz/PathBuilder.php');
 require('biz/PathMd5Builder.php');
 
