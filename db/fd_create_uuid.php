@@ -51,11 +51,11 @@ require('database/DBFile.php');
 require('database/DbFolder.php');
 require('model/FileInf.php');
 require('model/xdb_files.php');
+require('model/FolderInf.php');
 require('utils/PathTool.php');
 require('utils/FileResumer.php');
 require('biz/PathBuilder.php');
 require('biz/PathMd5Builder.php');
-require('model/FolderInf.php');
 require('biz/PathUuidBuilder.php');
 require('utils/FdDataWriter.php');
 
