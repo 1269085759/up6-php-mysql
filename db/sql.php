@@ -1,5 +1,5 @@
 <?php
-require('DbHelper.php');
+require('database/DbHelper.php');
 require('inc.php');
 /**
 	数据库初始化

@@ -11,8 +11,8 @@ ob_start();
 			简化文件块逻辑，
 			取消进度更新操作
 */
-require('DbHelper.php');
-require('DBFile.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
 require('xdb_files.php');
 require('FileResumer.php');
 require('HttpHeader.php');

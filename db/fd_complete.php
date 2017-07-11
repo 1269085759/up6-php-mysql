@@ -11,9 +11,9 @@ ob_start();
 		2014-09-15 修复返回JSONP数据格式错误的问题。
 		2016-05-31 优化调用，DBFolder::Complete会自动更新文件表信息，所以在此页面不需要再单独调用DBFile::fd_complete
 */
-require('DbHelper.php');
-require('DBFile.php');
-require('DBFolder.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
+require('database/DBFolder.php');
 
 $id_f   = $_GET["id_file"];
 $id_fd	= $_GET["id_folder"];

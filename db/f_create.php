@@ -14,9 +14,9 @@ header('Content-type: text/html;charset=utf-8');
 		2014-08-12 完成逻辑。
 		2017-07-11 优化
 */
-require('DbHelper.php');
-require('DBFile.php');
-require('DBFolder.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
+require('database/DBFolder.php');
 require('xdb_files.php');
 require('FileResumer.php');
 require('FolderInf.php');

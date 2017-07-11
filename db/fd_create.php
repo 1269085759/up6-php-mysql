@@ -44,10 +44,10 @@ header('Content-Type: text/html;charset=utf-8');
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
 */
-require('DbHelper.php');
+require('database/DbHelper.php');
 require('inc.php');
-require('DBFile.php');
-require('DbFolder.php');
+require('database/DBFile.php');
+require('database/DbFolder.php');
 require('FileInf.php');
 require('xdb_files.php');
 require('PathTool.php');

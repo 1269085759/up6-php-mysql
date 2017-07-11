@@ -6,7 +6,7 @@ ob_start();
 		2012-04-03 创建
 */
 require('FileDown.class.php');
-require('DbHelper.php');
+require('database/DbHelper.php');
 
 $fid = $_GET["fid"];
 

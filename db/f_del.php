@@ -10,8 +10,8 @@ header('Content-Type: text/html;charset=utf-8');
 		2012-4-2 创建
 		2014-09-12 完成逻辑。
 */
-require('DbHelper.php');
-require('DBFile.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
 
 $uid = $_GET["uid"];
 $fid = $_GET["fid"];
