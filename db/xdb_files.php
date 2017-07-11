@@ -5,15 +5,15 @@
 */
 class xdb_files
 {
-	var $idSvr=0;
+	var $id="";
 	/**
 	 * 文件夹ID
 	 */
-	var $pid=0;
+	var $pid="";
     /**
      * 根级文件夹ID
      */
-    var $pidRoot=0;
+    var $pidRoot="";
 	/**
 	 * 表示当前项是否是一个文件夹项。
 	 */
@@ -25,7 +25,7 @@ class xdb_files
 	/// <summary>
 	/// 是否是文件夹中的子文件
 	/// </summary>
-	var $f_fdChild;
+	var $fdChild;
 	/**
 	 * 用户ID。与第三方系统整合使用。
 	 */
@@ -63,9 +63,9 @@ class xdb_files
 	 */
 	var $sizeLoc="";
 	/**
-	 * 文件续传位置。
+	 * 文件续传位置。相对于整个文件的偏移
 	 */
-	var $FilePos=0;
+	var $offset=0;
 	/**
 	 * 已上传大小。以字节为单位
 	 */

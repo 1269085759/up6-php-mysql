@@ -32,6 +32,13 @@ class PathTool
 		return $txt;		
 	}
 	
+	static function urldecode_path($txt)
+	{
+		$txt = str_replace("+","%20",$txt);
+		$txt = urldecode(txt);
+		return $txt;				
+	}
+	
 	static function combin($p1,$p2)
 	{
 		$str_len = strlen($p1);//总长度

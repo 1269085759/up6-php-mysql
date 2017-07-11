@@ -12,6 +12,7 @@ header('Content-type: text/html;charset=utf-8');
 	控件每次计算完文件MD5时都将向信息上传到此文件中
 	@更新记录：
 		2014-08-12 完成逻辑。
+		2017-07-11 优化
 */
 require('DbHelper.php');
 require('DBFile.php');
@@ -24,14 +25,14 @@ require('biz/PathBuilder.php');
 require('biz/PathMd5Builder.php');
 
 $md5 			= $_GET["md5"];
+$id 			= $_GET["id"];
 $uid 			= $_GET["uid"];
 $lenLoc			= $_GET["lenLoc"];//10240
 $sizeLoc		= $_GET["sizeLoc"];//10mb
 $sizeLoc		= str_replace("+", " ", $sizeLoc);
 $callback 		= $_GET["callback"];//jsonp
 $pathLoc		= $_GET["pathLoc"];
-$pathLoc		= str_replace("+","%20",$pathLoc);
-$pathLoc		= urldecode($pathLoc);
+$pathLoc		= PathTool::urldecode_path($pathLoc);
 
 if(    empty($md5)
 	|| strlen($uid)<1
@@ -43,8 +44,9 @@ if(    empty($md5)
 
 $ext = PathTool::getExtention($pathLoc);
 $fileSvr = new xdb_files();
-$fileSvr->f_fdChild = false;
-$fileSvr->f_fdTask = false;
+$fileSvr->id = $id;
+$fileSvr->fdChild = false;
+$fileSvr->fdTask = false;
 $fileSvr->nameLoc = PathTool::getName($pathLoc);
 $fileSvr->pathLoc = $pathLoc;
 $fileSvr->nameSvr = "$md5.$ext";
@@ -68,11 +70,11 @@ if ($db->exist_file($md5, $fileExist))
 	$fileSvr->perSvr = $fileExist->perSvr;
 	$fileSvr->lenSvr = intval($fileExist->lenSvr);
 	$fileSvr->complete = (bool)$fileExist->complete;
-	$fileSvr->idSvr = (int)$db->Add($fileSvr);
+	$db->Add($fileSvr);
 }//数据库不存在相同文件
 else
 {
-	$fileSvr->idSvr = (int)$db->Add($fileSvr);
+	$db->Add($fileSvr);
 	
 	//创建文件
 	$fr = new FileResumer();
@@ -81,6 +83,7 @@ else
 //fix:防止json_encode将汉字转换成unicode
 $fileSvr->nameLoc = PathTool::urlencode_safe($fileSvr->nameLoc);
 $fileSvr->pathLoc = PathTool::urlencode_safe($fileSvr->pathLoc);
+$fileSvr->pathSvr = PathTool::urlencode_safe($fileSvr->pathSvr);
 	
 $json = json_encode($fileSvr);//低版本php中，json_encode会将汉字进行unicode编码
 $json = urldecode( $json );//还原汉字

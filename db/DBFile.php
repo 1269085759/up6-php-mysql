@@ -461,7 +461,8 @@ class DBFile
 	function Add(&$model/*xdb_files*/)
 	{
 		$sb = "insert into up6_files(";
-		$sb = $sb . " f_sizeLoc";
+		$sb = $sb . " f_id";
+		$sb = $sb . ",f_sizeLoc";
 		$sb = $sb . ",f_pos";
 		$sb = $sb . ",f_lenSvr";
 		$sb = $sb . ",f_perSvr";
@@ -480,7 +481,8 @@ class DBFile
 		
 		$sb = $sb . ") values (";
 		
-		$sb = $sb . " :f_sizeLoc";//"@f_sizeLoc";
+		$sb = $sb . " :f_id";//"@f_id";
+		$sb = $sb . ",:f_sizeLoc";//"@f_sizeLoc";
 		$sb = $sb . ",:f_pos";//",@f_pos";
 		$sb = $sb . ",:f_lenSvr";//",@f_lenSvr";
 		$sb = $sb . ",:f_perSvr";//",@f_perSvr";
@@ -501,6 +503,7 @@ class DBFile
 		$db = &$this->db;
 		$cmd = $db->prepare_utf8( $sb );		
 		
+		$cmd->bindParam(":f_id",$model->id);
 		$cmd->bindParam(":f_sizeLoc",$model->sizeLoc);
 		$cmd->bindValue(":f_pos",$model->FilePos,PDO::PARAM_INT);
 		$cmd->bindValue(":f_lenSvr",$model->lenSvr,PDO::PARAM_INT);
@@ -515,9 +518,7 @@ class DBFile
 		$cmd->bindParam(":f_md5",$model->md5);
 		$cmd->bindValue(":f_lenLoc",$model->lenLoc,PDO::PARAM_INT);
 
-		$f_id = $db->ExecuteGenKey($cmd,"f_id");
-		
-		return $f_id;
+		$db->ExecuteNonQuery($cmd);
 	}
 
 	/// <summary>
