@@ -119,9 +119,24 @@ var up6_app = {
         param.name = "post_folder";
         this.postMessage(param);
     }
+    , updateFolder: function (fd) {
+        var param = { name: "update_folder"};
+        jQuery.extend(param, fd);
+        this.postMessage(param);
+    }
+    , delFolder: function (v)
+    {
+        var param = { name: "del_folder"};
+        jQuery.extend(param, v);
+        this.postMessage(param);
+    }
     , stopFile: function (f)
     {
         var param = { name: "stop_file", id: f.id, config: this.Config};
+        this.postMessage(param);
+    }
+    , delFile: function (f) {
+        var param = { name: "del_file", id: f.id};
         this.postMessage(param);
     }
     , postMessage:function(json)
