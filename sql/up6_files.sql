@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS `up6_files` (
-  `f_id` 				int(11) NOT NULL auto_increment,
-  `f_pid` 				int(11) default '0',		/*父级文件夹ID*/
-  `f_pidRoot` 			int(11) default '0',		/*根级文件夹ID*/
+  `f_id` 				char(32) NOT NULL,
+  `f_pid` 				char(32) default '',		/*父级文件夹ID*/
+  `f_pidRoot` 			char(32) default '',		/*根级文件夹ID*/
   `f_fdTask` 			tinyint(1) default '0',		/*是否是一条文件夹信息*/
-  `f_fdID` 				int(11) default '0',		/*与文件夹表(up6_folders.fd_id)对应*/
   `f_fdChild` 			tinyint(1) default '0',		/*是否是文件夹中的文件*/
   `f_uid` 				int(11) default '0',
   `f_nameLoc` 			varchar(255) default '',	/*文件在本地的名称（原始文件名称）*/
