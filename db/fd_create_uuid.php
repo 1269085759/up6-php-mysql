@@ -136,7 +136,7 @@ foreach($folders as $folder)
 	//更新文件夹数据
 	$fd_writer->add_folder($fd);
 	
-	$tbFolders[$fd->id] = $fd;
+	$fd_map[$fd->id] = $fd;
 	array_push($svr_folders,$fd);
 }
 
@@ -161,7 +161,7 @@ foreach($files as $file)
 	$f->lenSvr		= $file["lenSvr"];
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uid);
-	$f_parent 		= $tbFolders[$f->pid];
+	$f_parent 		= $fd_map[$f->pid];
 	$f->pathSvr		= PathTool::combin( $f_parent->pathSvr , $f->nameLoc);	
 		
 	$fd_writer->add_file($f);//添加到数据库
