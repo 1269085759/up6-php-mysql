@@ -54,7 +54,6 @@ require('utils/inc.php');
 require('database/DBFile.php');
 require('database/DbFolder.php');
 require('model/FileInf.php');
-require('model/xdb_files.php');
 require('model/FolderInf.php');
 require('utils/PathTool.php');
 require('utils/FileResumer.php');
@@ -103,12 +102,10 @@ $fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
-$fdroot->id 		= "";//初始化时，控件中顶级目录idLoc为0
+$fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
-$fdroot->pathSvr 	= $jsonArr["pathSvr"];
-$fdroot->pathLoc 	= PathTool::unicode_decode( $jsonArr["pathLoc"] );
-$fdroot->filesCount = (int)$jsonArr["filesCount"];//
-$fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
+$fdroot->pathSvr 	= "";
+$fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
 
 //创建文件夹
 $pb = new PathUuidBuilder();
@@ -116,68 +113,57 @@ $fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
 $fd_writer = new FdDataWriter();
 
-$fd_writer->fd_update($fdroot);//更新文件夹数据
-$fd_writer->f_update_fd($fdroot);//更新文件数据
+$fd_map = array();
+$fd_map[$fdroot->id] = $fdroot;
+$svr_folders = array();
 
-
-$tbFolders = array();
-
-$arrFolders = array();
 //解析文件夹
 foreach($folders as $folder)
 {
 	$fd 			= new FolderInf();
 	$fd->nameLoc	= PathTool::unicode_decode( $folder["nameLoc"] );
-	$fd->idLoc 		= (int)$folder["idLoc"];
-	$fd->idSvr 		= (int)$folder["idSvr"];
-	$fd->pidRoot 	= 0;//
-	$fd->pidLoc		= (int)$folder["pidLoc"];
-	$fd->pidSvr		= (int)$folder["pidSvr"];
+	$fd->id 		= $folder["id"];
+	$fd->pid 		= $folder["pid"];
+	$fd->pidRoot 	= $folder["pidRoot"];
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
-	//$fd->size		= $folder["size"];
 	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
-			
-	//创建层级结构
-	$fdParent = $tbFolders[strval($fd->pidLoc)];		
-	$fd->pathSvr = PathTool::combin($fdParent->pathSvr,$fd->nameLoc);
-	$fd->pathRel = PathTool::combin($fdParent->pathRel,$fd->nameLoc);
-	$pb->createFolder($fd->pathSvr);//自动创建文件夹
-	
-	$fd->pidSvr = $fdParent->idSvr;
-	$fd->idSvr = intval( array_shift($fd_ids) );//取一个文件夹ID
+	$fd->pathRel 	= PathTool::unicode_decode($folder["pathRel"]);
+	$fd_parent 		= $fd_map[$fd->pid];			
+	$fd->pathSvr 	= PathTool::combin($fd_parent->pathSvr,$fd->nameLoc);
+	$pb->createFolder($fd->pathSvr);//自动创建文件夹	
 	//更新文件夹数据
-	$fd_writer->fd_update($fd);
+	$fd_writer->add_folder($fd);
 	
-	$tbFolders[strval($fd->idLoc)] = $fd;
-	array_push($arrFolders,$fd);
+	$tbFolders[$fd->id] = $fd;
+	array_push($svr_folders,$fd);
 }
 
-$arrFiles = array();
+$svr_files = array();
 
 //如果文件非常多可能执行超时
 set_time_limit(0);
 
 //解析文件
 foreach($files as $file)
-{
-	$pidFD			= $tbFolders[ strval($file["pidLoc"]) ];
-			
+{			
 	$f				= new FileInf();
 	$f->nameLoc		= PathTool::unicode_decode( $file["nameLoc"] );
 	$f->nameSvr		= $f->nameLoc;
 	$f->pathLoc		= PathTool::unicode_decode( $file["pathLoc"] );
-	$f->idLoc		= (int)$file["idLoc"];	
-	$f->lenLoc		= (int)$file["lenLoc"];
+	$f->pathRel		= PathTool::unicode_decode( $file["pathRel"] );
+	$f->id			= $file["id"];
+	$f->pid			= $file["pid"];
+	$f->pidRoot		= $file["pidRoot"];
+	$f->lenLoc		= $file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
-	//$f->perSvr 		= $file["perSvr"];
-	$f->lenSvr		= intval($file["lenSvr"]);
+	$f->lenSvr		= $file["lenSvr"];
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uid);
-	$f->pathSvr		= PathTool::combin( $pidFD->pathSvr , $f->nameLoc);	
-	
-	$f->idSvr 		= intval( array_shift($f_ids) );//取一个文件ID
-	$fd_writer->f_update($f);//更新文件数据
+	$f_parent 		= $tbFolders[$f->pid];
+	$f->pathSvr		= PathTool::combin( $f_parent->pathSvr , $f->nameLoc);	
+		
+	$fd_writer->add_file($f);//更新文件数据
 	
 	//创建文件
 	$fr = new FileResumer();
@@ -189,7 +175,7 @@ foreach($files as $file)
 	$f->pathLoc		= PathTool::urlencode_safe($f->pathLoc);
 	$f->pathSvr		= PathTool::urlencode_safe($f->pathSvr);
 	
-	array_push($arrFiles,$f);
+	array_push($svr_files,$f);
 }
 
 //fix(2017-04-19):防止中文被转换为unicode
@@ -197,7 +183,7 @@ $fdroot->nameLoc = PathTool::urlencode_safe($fdroot->nameLoc);
 $fdroot->pathLoc = PathTool::urlencode_safe($fdroot->pathLoc);
 $fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
 //fix:防止子目录汉字被转换成unicode
-foreach($arrFolders as $fd)
+foreach($svr_folders as $fd)
 {
 	$fd->nameLoc = PathTool::urlencode_safe($fd->nameLoc);
 	$fd->pathSvr = PathTool::urlencode_safe($fd->pathSvr);
@@ -205,12 +191,12 @@ foreach($arrFolders as $fd)
 	$fd->pathRel = PathTool::urlencode_safe($fd->pathRel);
 }
 //转换为JSON
-$fdroot->folders = $arrFolders;
-$fdroot->files = $arrFiles;
+$fdroot->folders = $svr_folders;
+$fdroot->files = $svr_files;
 $fdroot->complete = false;
 //fix(2017-04-19):增加对空文件夹的处理
 if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
-$json = json_encode($fdroot);//bug:汉字被编码成了unicode
+$json = json_encode($fdroot);//fix:汉字被编码成了unicode
 $json = urldecode( $json );
 
 //将数组转换为JSON

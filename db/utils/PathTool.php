@@ -66,6 +66,7 @@ class PathTool
 		return iconv($encode, "GB2312", $str);
 	}
 	
+	//将多字节转换为utf8
 	static function unicode_decode($str)
 	{
 		return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',

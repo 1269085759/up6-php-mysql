@@ -111,19 +111,23 @@ class FdDataWriter
 					 fd_id
 					,fd_name
 					,fd_pid
+					,fd_pidRoot
+					,fd_pathSvr
+					,fd_pathRel
 					,fd_uid
 					,fd_files
 					,fd_folders
-					,fd_pidRoot
 					)
 					values(
 					 :id
 					,:name
 					,:pid
+					,:pidRoot
+					,:pathSvr
+					,:pathRel
 					,:uid
 					,:files
 					,:folders
-					,:pidRoot
 					)
 					";
 			$con = $this->con_utf8;
@@ -134,6 +138,8 @@ class FdDataWriter
 		$cmd->bindParam(":id", $inf->id );
 		$cmd->bindValue(":pid", $inf->pid );
 		$cmd->bindValue(":pidRoot", $inf->pidRoot );
+		$cmd->bindValue(":pathSvr", $inf->pathSvr);
+		$cmd->bindValue(":pathRel", $inf->pathRel );
 		$cmd->bindValue(":name", $inf->nameLoc);
 		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
 		$cmd->bindValue(":files", 0);
