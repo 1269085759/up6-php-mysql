@@ -143,7 +143,7 @@ class FdDataWriter
 		$cmd->bindValue(":name", $inf->nameLoc);
 		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
 		$cmd->bindValue(":files", 0);
-		$cmd->bindParam(":folders", 0);
+		$cmd->bindValue(":folders", 0);
 		
 		if(!$cmd->execute())
 		{
