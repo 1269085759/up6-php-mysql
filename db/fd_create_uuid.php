@@ -99,6 +99,7 @@ if( !empty($jsonArr["files"]) )
 //将$jsonArr赋值给$fdroot
 $fdroot 			= new FolderInf();
 $fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
+$fdroot->nameSvr	= $fdroot->nameLoc; 
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->sizeLoc	= $jsonArr["sizeLoc"];
 $fdroot->sizeLoc	= str_replace("+", " ", $fdroot->sizeLoc);
@@ -192,8 +193,8 @@ foreach($svr_folders as $fd)
 	$fd->pathRel = PathTool::urlencode_safe($fd->pathRel);
 }
 //转换为JSON
-$fdroot->folders = $svr_folders;
-$fdroot->files = $svr_files;
+//$fdroot->folders = $svr_folders;
+//$fdroot->files = $svr_files;
 $fdroot->complete = false;
 //fix(2017-04-19):增加对空文件夹的处理
 if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
