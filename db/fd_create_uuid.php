@@ -134,7 +134,7 @@ foreach($folders as $folder)
 	//更新文件夹数据
 	$fd_writer->add_folder($fd);
 	
-	array_push($svr_folders,$fd);
+	$svr_folders[] = $fd;
 }
 
 $svr_files = array();
