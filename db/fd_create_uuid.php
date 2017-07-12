@@ -163,7 +163,7 @@ foreach($files as $file)
 	$f_parent 		= $tbFolders[$f->pid];
 	$f->pathSvr		= PathTool::combin( $f_parent->pathSvr , $f->nameLoc);	
 		
-	$fd_writer->add_file($f);//更新文件数据
+	$fd_writer->add_file($f);//添加到数据库
 	
 	//创建文件
 	$fr = new FileResumer();
