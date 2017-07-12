@@ -22,7 +22,7 @@ require('model/FolderInf.php');
 require('utils/FileResumer.php');
 require('utils/PathTool.php');
 require('biz/PathBuilder.php');
-require('biz/PathMd5Builder.php');
+require('biz/PathBuilderMd5.php');
 
 $md5 			= $_GET["md5"];
 $id 			= $_GET["id"];

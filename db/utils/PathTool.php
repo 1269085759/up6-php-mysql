@@ -35,7 +35,7 @@ class PathTool
 	static function urldecode_path($txt)
 	{
 		$txt = str_replace("+","%20",$txt);
-		$txt = urldecode(txt);
+		$txt = urldecode($txt);
 		return $txt;				
 	}
 	
