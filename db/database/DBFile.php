@@ -169,22 +169,21 @@ class DBFile
 	/// <returns></returns>
 	static function GetAllUnComplete($f_uid)
 	{
-		$sql = "select ";
-		$sql = $sql . " f_id";
-		$sql = $sql . ",f_fdTask";
-		$sql = $sql . ",f_nameLoc";
-		$sql = $sql . ",f_pathLoc";
-		$sql = $sql . ",f_pathSvr";
-		$sql = $sql . ",f_md5";
-		$sql = $sql . ",f_lenLoc";
-		$sql = $sql . ",f_sizeLoc";
-		$sql = $sql . ",f_pos";
-		$sql = $sql . ",f_lenSvr";
-		$sql = $sql . ",f_perSvr";
-		$sql = $sql . ",f_complete";
-		//文件夹信息
-		$sql = $sql . " from up6_files";
-		$sql = $sql . " where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=0;";//只加载未完成列表
+		$sql = "select 
+				 f_id
+				,f_fdTask
+				,f_nameLoc
+				,f_pathLoc
+				,f_pathSvr
+				,f_md5
+				,f_lenLoc
+				,f_sizeLoc
+				,f_pos
+				,f_lenSvr
+				,f_perSvr
+				,f_complete
+				 from up6_files
+				 where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=0;";//只加载未完成列表
 
 		//取未完成的文件列表
 		$files = array();
