@@ -172,7 +172,6 @@ class DBFile
 		$sql = "select ";
 		$sql = $sql . " f_id";
 		$sql = $sql . ",f_fdTask";
-		$sql = $sql . ",f_fdID";
 		$sql = $sql . ",f_nameLoc";
 		$sql = $sql . ",f_pathLoc";
 		$sql = $sql . ",f_pathSvr";
@@ -184,15 +183,13 @@ class DBFile
 		$sql = $sql . ",f_perSvr";
 		$sql = $sql . ",f_complete";
 		//文件夹信息
-		$sql = $sql . ",fd_files";
-		$sql = $sql . ",fd_filesComplete";
-		$sql = $sql . " from up6_files left join up6_folders on up6_files.f_fdID = up6_folders.fd_id";//联合查询文件夹数据
+		$sql = $sql . " from up6_files";
 		$sql = $sql . " where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=0;";//只加载未完成列表
 
 		//取未完成的文件列表
 		$files = array();
 		$db = new DbHelper();
-		$cmd =& $db->GetCommand($sql);
+		$cmd = $db->GetCommand($sql);
 		
 		//设置字符集，防止中文在数据库中出现乱码
 		$db->ExecuteNonQueryConTxt("set names utf8");
@@ -201,57 +198,27 @@ class DBFile
 		$ret = $db->ExecuteDataSet($cmd);
 		foreach($ret as $row)
 		{			
-			$f = new xdb_files();
-			$f->uid				= $f_uid;
-			$f->idSvr 			= intval($row["f_id"]);
-			$f->f_fdTask 		= (bool)($row["f_fdTask"]);
-			$f->f_fdID 			= $row["f_fdID"];
-			$f->nameLoc 		= $row["f_nameLoc"];
-			$f->pathLoc 		= $row["f_pathLoc"];
-			$f->pathSvr			= $row["f_pathSvr"];
-			$f->md5 			= $row["f_md5"];
-			$f->lenLoc 			= $row["f_lenLoc"];
-			$f->sizeLoc 		= $row["f_sizeLoc"];
-			$f->FilePos 		= $row["f_pos"];
-			$f->lenSvr 			= $row["f_lenSvr"];
-			$f->perSvr 			= $row["f_perSvr"];
-			$f->complete 		= (bool)$row["f_complete"];
-			$f->IsDeleted		= (bool)$row["f_deleted"];
-			$f->PostedTime		= $row["f_time"];
-			$f->filesCount		= intval($row["fd_files"]);
-			$f->filesComplete	= intval($row["fd_filesComplete"]);
+			$f = new FileInf();
+			$f->uid			= $f_uid;
+			$f->id 			= $row["f_id"];
+			$f->fdTask 		= (bool)($row["f_fdTask"]);
+			$f->nameLoc 	= $row["f_nameLoc"];
+			$f->pathLoc 	= $row["f_pathLoc"];
+			$f->pathSvr		= $row["f_pathSvr"];
+			$f->md5 		= $row["f_md5"];
+			$f->lenLoc 		= $row["f_lenLoc"];
+			$f->sizeLoc 	= $row["f_sizeLoc"];
+			$f->FilePos 	= $row["f_pos"];
+			$f->lenSvr 		= $row["f_lenSvr"];
+			$f->perSvr 		= $row["f_perSvr"];
+			$f->complete 	= false;
+			$f->deleted		= false;
+			$f->nameLoc 	= PathTool::urlencode_safe($f->nameLoc);//防止汉字被json_encode转换为unicode
+			$f->pathLoc 	= PathTool::urlencode_safe($f->pathLoc);//防止汉字被json_encode转换为unicode
 
-			array_push($files,$f);
+			$files[] = $f;
 		}
-		
-		if( count( $files ) < 1) return null;
-		
-		//填充文件夹信息
-		$arrFiles = array();
-		foreach ($files as $file)
-		{			
-			//是文件夹任务=>取文件夹JSON
-			if ($file->f_fdTask)
-			{
-				$fd = new FolderInf();				
-				$file->fd_json = DBFolder::GetFilesUnCompleteJson($file->f_fdID,$fd);
-				$file->nameLoc = $fd->name;								
-				$pdPer = 0;
-				$lenPosted = DBFolder::GetLenPosted($file->f_fdID);
-				$fd->lenSvr = $lenPosted;
-				$file->lenSvr = $lenPosted;//给客户端使用。
-				$len = $fd->lenLoc;
-				if ($lenPosted > 0 && $len > 0)
-				{
-					$pdPer = round(($lenPosted / $len) * 100,2);
-				}
-				$file->idSvr = $file->f_fdID;//将文件ID改为文件夹的ID，客户端续传文件夹时将会使用这个ID。
-				$file->perSvr = $pdPer . "%";
-				$file->sizeLoc = $fd->size;
-			}
-			array_push($arrFiles,$file);
-		}
-		return json_encode($arrFiles);
+		return json_encode($files);
 	}
 
 	/// <summary>

@@ -17,7 +17,7 @@ header('Content-type: text/html;charset=utf-8');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
-require('model/xdb_files.php');
+require('model/FileInf.php');
 require('model/FolderInf.php');
 require('utils/FileResumer.php');
 require('utils/PathTool.php');
@@ -43,7 +43,7 @@ if(    empty($md5)
 }
 
 $ext = PathTool::getExtention($pathLoc);
-$fileSvr = new xdb_files();
+$fileSvr = new FileInf();
 $fileSvr->id = $id;
 $fileSvr->fdChild = false;
 $fileSvr->fdTask = false;
@@ -61,7 +61,7 @@ $pb = new PathMd5Builder();
 $fileSvr->pathSvr = $pb->genFile($uid,$fileSvr->md5,$fileSvr->nameLoc);
 
 $db = new DBFile();
-$fileExist = new xdb_files();
+$fileExist = new FileInf();
 
 //数据库存在相同文件
 if ($db->exist_file($md5, $fileExist))

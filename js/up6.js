@@ -106,13 +106,13 @@ function HttpUploaderMgr()
         , "Md5Thread"       : 10//最大为10
         , "FolderThread"    : 3//最大为10
 		//文件夹操作相关
-		, "UrlFdCreate"		: "http://localhost:811/up6/db/fd_create.php"
+		, "UrlFdCreate"		: "http://localhost:811/up6/db/fd_create_uuid.php"
 		, "UrlFdComplete"	: "http://localhost:811/up6/db/fd_complete.php"
 		, "UrlFdDel"	    : "http://localhost:811/up6/db/fd_del.php"
 		//文件操作相关
 		, "UrlCreate"		: "http://localhost:811/up6/db/f_create.php"
 		, "UrlPost"			: "http://localhost:811/up6/db/f_post.php"
-        , "UrlProcess"		: "http://localhost:8888/db/f_process.aspx"
+        , "UrlProcess"		: "http://localhost:811/db/f_process.aspx"
 		, "UrlComplete"		: "http://localhost:811/up6/db/f_complete.php"
 		, "UrlList"			: "http://localhost:811/up6/db/f_list.php"
 		, "UrlDel"			: "http://localhost:811/up6/db/f_del.php"
