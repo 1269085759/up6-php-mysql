@@ -22,7 +22,7 @@ $ret 	= 0;
 
 //参数为空
 if (	strlen($uid) > 0
-	||	strlen($id_fd) >0  )
+	||	strlen($id) >0  )
 {
 	$fd = new DBFolder();
 	$fd->Complete($id, $uid);
