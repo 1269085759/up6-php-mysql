@@ -171,30 +171,11 @@ foreach($files as $file)
 	$fr = new FileResumer();
 	$fr->CreateFile($f->pathSvr);
 	
-	//fix:防止json_encode将汉字转换成unicode
-	$f->nameLoc		= PathTool::urlencode_safe($f->nameLoc);
-	$f->nameSvr		= PathTool::urlencode_safe($f->nameSvr);
-	$f->pathLoc		= PathTool::urlencode_safe($f->pathLoc);
-	$f->pathSvr		= PathTool::urlencode_safe($f->pathSvr);
-	
 	$svr_files[] = $f;
 }
 
-//fix(2017-04-19):防止中文被转换为unicode
-$fdroot->nameLoc = PathTool::urlencode_safe($fdroot->nameLoc);
-$fdroot->pathLoc = PathTool::urlencode_safe($fdroot->pathLoc);
 $fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
-//fix:防止子目录汉字被转换成unicode
-foreach($svr_folders as $fd)
-{
-	$fd->nameLoc = PathTool::urlencode_safe($fd->nameLoc);
-	$fd->pathSvr = PathTool::urlencode_safe($fd->pathSvr);
-	$fd->pathLoc = PathTool::urlencode_safe($fd->pathLoc);
-	$fd->pathRel = PathTool::urlencode_safe($fd->pathRel);
-}
-//转换为JSON
-//$fdroot->folders = $svr_folders;
-//$fdroot->files = $svr_files;
+
 $fdroot->complete = false;
 //fix(2017-04-19):增加对空文件夹的处理
 if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
