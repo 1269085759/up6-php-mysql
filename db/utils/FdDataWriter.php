@@ -81,6 +81,7 @@ class FdDataWriter
 		$cmd->bindParam(":nameSvr", $inf->nameSvr);
 		$cmd->bindParam(":pathLoc", $inf->pathLoc);
 		$cmd->bindParam(":pathSvr", $inf->pathSvr);
+		$cmd->bindParam(":pathRel", $inf->pathRel);
 		$cmd->bindParam(":md5", $inf->md5);
 		$cmd->bindValue(":lenLoc", $inf->lenLoc);
 		$cmd->bindParam(":sizeLoc", $inf->sizeLoc);
