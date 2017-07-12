@@ -58,8 +58,8 @@ require('model/FolderInf.php');
 require('utils/PathTool.php');
 require('utils/FileResumer.php');
 require('biz/PathBuilder.php');
-require('biz/PathMd5Builder.php');
-require('biz/PathUuidBuilder.php');
+require('biz/PathBuilderMd5.php');
+require('biz/PathBuilderUuid.php');
 require('utils/FdDataWriter.php');
 
 $jsonTxt = $_POST["folder"];
@@ -100,7 +100,8 @@ if( !empty($jsonArr["files"]) )
 $fdroot 			= new FolderInf();
 $fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
-$fdroot->size 		= $jsonArr["size"];
+$fdroot->sizeLoc	= $jsonArr["sizeLoc"];
+$fdroot->sizeLoc	= str_replace("+", " ", $fdroot->sizeLoc);
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
