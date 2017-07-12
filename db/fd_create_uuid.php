@@ -176,7 +176,7 @@ foreach($files as $file)
 	$f->pathLoc		= PathTool::urlencode_safe($f->pathLoc);
 	$f->pathSvr		= PathTool::urlencode_safe($f->pathSvr);
 	
-	array_push($svr_files,$f);
+	$svr_files[] = $f;
 }
 
 //fix(2017-04-19):防止中文被转换为unicode
