@@ -62,23 +62,15 @@ class DBFolder
 	 * 将文件夹上传状态设为已完成
 	 * 更新文件表
 	 * 更新文件夹表
-	 * @param unknown $id_fd	文件夹ID
-	 * @param unknown $id_f		文件ID
+	 * @param unknown $id	文件ID
 	 * @param unknown $uid
 	 */
-	function Complete($id_fd,$id_f,$uid)
-	{
-		$sql = "update up6_folders set fd_complete=1 where fd_id=:fd_id and fd_uid=:fd_uid;";		
+	function Complete($id,$uid)
+	{		
+		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
-		$cmd->bindValue(":fd_id",$id_fd);
-		$cmd->bindValue(":fd_uid",$uid);
-		$db->ExecuteNonQuery($cmd);
-		
-		//fix:更新文件表
-		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
-		$cmd =& $db->GetCommand($sql);
-		$cmd->bindValue(":f_id",$id_f);
+		$cmd->bindValue(":f_id",$id);
 		$cmd->bindValue(":f_uid",$uid);
 		$db->ExecuteNonQuery($cmd);		
 	}

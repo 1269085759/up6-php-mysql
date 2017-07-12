@@ -15,8 +15,7 @@ require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
 
-$id_f   = $_GET["id_file"];
-$id_fd	= $_GET["id_folder"];
+$id   	= $_GET["id"];
 $uid	= $_GET["uid"];
 $cbk 	= $_GET["callback"];//jsonp
 $ret 	= 0;
@@ -26,7 +25,7 @@ if (	strlen($uid) > 0
 	||	strlen($id_fd) >0  )
 {
 	$fd = new DBFolder();
-	$fd->Complete($id_fd,$id_f, $uid);
+	$fd->Complete($id, $uid);
 	$ret = 1;
 }
 echo "$cbk( $ret )";
