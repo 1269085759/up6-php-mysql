@@ -40,6 +40,8 @@ header('Content-Type: text/html;charset=utf-8');
 		2014-09-15 修复设置子文件，子文件夹层级结构错误的问题。
 		2016-04-13 以md5模式上传文件夹
 		2016-05-29 修复添加文件夹数据错误的问题。
+		2017-07-11
+			取消ID生成操作
 
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
@@ -49,7 +51,6 @@ require('utils/inc.php');
 require('database/DBFile.php');
 require('database/DbFolder.php');
 require('model/FileInf.php');
-require('model/xdb_files.php');
 require('model/FolderInf.php');
 require('utils/PathTool.php');
 require('utils/FileResumer.php');
@@ -94,37 +95,19 @@ $fdroot->nameLoc	= $jsonArr["nameLoc"];
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//部分php-32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//php-32不支持int64
-$fdroot->pidLoc 	= 0;
-$fdroot->pidSvr 	= 0;
-$fdroot->idLoc 		= (int)$jsonArr["idLoc"];
-$fdroot->idSvr 		= (int)$jsonArr["idSvr"];
+$fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uidTxt);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
 $fdroot->pathLoc 	= $jsonArr["pathLoc"];
-$fdroot->filesCount = (int)$jsonArr["filesCount"];//
-$fdroot->foldersCount = (int)$jsonArr["foldersCount"];//
 $fdroot->complete	= $jsonArr["complete"];  
 
 $fd_writer = new FdDataWriter();
-//分配文件和文件夹ID数
-$ids 		= $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1);
-$fd_ids 	= explode(",",$ids["ids_fd"]);
-$f_ids  	= explode(",",$ids["ids_f"]);
-
-$fdroot->idSvr 	= array_shift($fd_ids);//取一个文件夹ID
-$fdroot->idFile = array_shift($f_ids);//取一个文件ID
 
 //对空文件夹的处理，或0字节文件夹的处理
 if($fdroot->lenLoc == "0")
 {
 	$fdroot->complete = true;	
 }
-
-$fd_writer->fd_update($fdroot);//更新文件夹数据
-$fd_writer->f_update_fd($fdroot);//更新文件数据
-
-$tbFolders = array();
-$tbFolders["0"] = $fdroot;
 
 $arrFolders = array();
 
@@ -133,30 +116,20 @@ foreach($folders as $folder)
 {
 	$fd 			= new FolderInf();
 	$fd->nameLoc	= $folder["nameLoc"];
-	$fd->idLoc 		= intval($folder["idLoc"]);
-	$fd->idSvr 		= intval($folder["idSvr"]);
-	$fd->pidRoot 	= 0;//$folder["pidRoot"];
-	$fd->pidLoc		= (int)$folder["pidLoc"];
-	$fd->pidSvr		= (int)$folder["pidSvr"];
-	//$fd->lenLoc		= $folder["length"];
-	//$fd->size		= $folder["size"];
+	$fd->id 		= $folder["id"];
+	$fd->pid		= $folder["pid"];
+	$fd->pidRoot 	= $folder["pidRoot"];
+	$fd->nameLoc	= $folder["nameLoc"];
 	$fd->pathLoc	= $folder["pathLoc"];
 	$fd->pathSvr	= $folder["pathSvr"];
 	$fd->uid 		= intval($uidTxt);
 			
-	//查找父级文件夹
-	$fdParent = $tbFolders[strval($fd->pidLoc)];		
-	
-	$fd->pidSvr = $fdParent->idSvr;
-	$fd->idSvr = intval( array_shift($fd_ids) );//取一个文件夹ID
 	//更新文件夹数据
-	$fd_writer->fd_update($fd);
-	
-	$tbFolders[strval($fd->idLoc)] = $fd;
-	array_push($arrFolders,$fd);
+	$fd_writer->add_folder($fd);
+	$arrFolders[] = $fd;
 }
 
-$f_exist = new xdb_files();
+$f_exist = new FileInf();
 $arrFiles = array();
 
 //服务器已存在的文件
@@ -167,29 +140,18 @@ set_time_limit(0);
 
 //解析文件
 foreach($files as $file)
-{
-	$f_pidLoc		= strval($file["pidLoc"]);
-	$fd				= $tbFolders[ $f_pidLoc ];
+{		
 	$f				= new FileInf();
 	$f->nameLoc		= $file["nameLoc"];
 	$f->pathLoc		= $file["pathLoc"];
-	$f->idLoc		= (int)$file["idLoc"];	
-	$f->lenLoc		= (int)$file["lenLoc"];
+	$f->id			= $file["id"];
+	$f->pid			= $file["pid"];
+	$f->pidRoot		= $file["pidRoot"];
+	$f->lenLoc		= $file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
-	//$f->perSvr	= $file["perSvr"];
-	$f->lenSvr		= intval($file["lenSvr"]);
-	if(array_key_exists("md5",$file))
-	{
-		$f->md5		= $file["md5"];
-	}
-	else
-	{
-		$f->md5		= "";
-	}
-	$f->uid			= intval($uidTxt);
-	$f->pidRoot		= $fdroot->idSvr;
-	$f->pidSvr		= $fd->idSvr;
-	$f->pidLoc		= $fd->idLoc;
+	$f->lenSvr		= $file["lenSvr"];
+	$f->md5			= $file["md5"];
+	$f->uid			= (int)$uidTxt;	
 	$f->nameSvr		= $f->md5 . "." . PathTool::getExtention($f->pathLoc);
 	//生成文件路径
 	$pb				= new PathMd5Builder();	
@@ -216,8 +178,8 @@ foreach($files as $file)
 		$f->complete = (bool)intval($f_exist["f_complete"]);
 		$f->nameSvr  = $f_exist["f_nameSvr"];
 	}
-	$f->idSvr = intval( array_shift($f_ids) );//取一个文件ID
-	$fd_writer->f_update($f);//更新文件数据
+	
+	$fd_writer->add_file($f);//添加文件
 	
 	if( empty($f_exist) )
 	{
@@ -232,13 +194,12 @@ foreach($files as $file)
 	$f->pathLoc		= PathTool::urlencode_safe($f->pathLoc);
 	$f->pathSvr		= PathTool::urlencode_safe($f->pathSvr);
 	
-	array_push($arrFiles,$f);
+	$arrFiles[] = $f;
 }
 
 //转换为JSON
 $fdroot->folders = $arrFolders;
 $fdroot->files = $arrFiles;
-//$fdroot->complete = false;
 $json = json_encode($fdroot);//bug:汉字被编码成了unicode
 $json = urldecode( $json );//还原汉字
 

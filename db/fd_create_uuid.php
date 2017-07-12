@@ -41,6 +41,10 @@ header('Content-Type: text/html;charset=utf-8');
 		2016-04-13 从uuid模式创建文件夹
 		2016-05-29 优化数据库操作逻辑，将文件，文件夹操作改为批量操作，提高效率。
 		2017-04-19 完善对中文的支持。
+		2017-07-11 
+			取消文件更新操作
+			取消文件夹更新操作
+			取消ID生成操作
 
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
@@ -99,10 +103,7 @@ $fdroot->nameLoc	= PathTool::unicode_decode( $jsonArr["nameLoc"] );
 $fdroot->lenLoc 	= $jsonArr["lenLoc"];//fix:php32不支持int64
 $fdroot->size 		= $jsonArr["size"];
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
-$fdroot->pidLoc 	= 0;
-$fdroot->pidSvr 	= 0;
-$fdroot->idLoc 		= 0;//初始化时，控件中顶级目录idLoc为0
-$fdroot->idSvr 		= 0;//初始化时，idSvr为0
+$fdroot->id 		= "";//初始化时，控件中顶级目录idLoc为0
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
 $fdroot->pathLoc 	= PathTool::unicode_decode( $jsonArr["pathLoc"] );
@@ -114,20 +115,12 @@ $pb = new PathUuidBuilder();
 $fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
 $fd_writer = new FdDataWriter();
-//分配文件，文件夹ID
-$ids = $fd_writer->make_ids_batch($fdroot->filesCount+1,$fdroot->foldersCount+1);
-$fd_ids = explode(",",$ids["ids_fd"]);
-$f_ids  = explode(",",$ids["ids_f"]);
-
-$fdroot->idSvr 	= (int)array_shift($fd_ids);//取一个文件夹ID
-$fdroot->idFile = (int)array_shift($f_ids);//取一个文件ID
 
 $fd_writer->fd_update($fdroot);//更新文件夹数据
 $fd_writer->f_update_fd($fdroot);//更新文件数据
 
 
 $tbFolders = array();
-$tbFolders[strval($fdroot->idLoc)] = $fdroot;
 
 $arrFolders = array();
 //解析文件夹
@@ -181,9 +174,6 @@ foreach($files as $file)
 	$f->lenSvr		= intval($file["lenSvr"]);
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uid);
-	$f->pidRoot		= $fdroot->idSvr;
-	$f->pidSvr		= $pidFD->idSvr;
-	$f->pidLoc		= $pidFD->idLoc;
 	$f->pathSvr		= PathTool::combin( $pidFD->pathSvr , $f->nameLoc);	
 	
 	$f->idSvr 		= intval( array_shift($f_ids) );//取一个文件ID

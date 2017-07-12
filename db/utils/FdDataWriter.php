@@ -3,6 +3,7 @@
  * 更新记录：
  * 	2016-05-27 更名为FdDataWriter
  *  2016-05-29 将数据库操作改为批量操作，提高性能。
+ *  2017-07-12 修改逻辑
  * */
 class FdDataWriter
 {
@@ -18,7 +19,131 @@ class FdDataWriter
 	{
 		$this->db = new DbHelper();
 		$this->con_utf8 =& $this->db->GetConUtf8();
-	}	
+	}
+	
+	function add_file($inf/*FileInf*/)
+	{
+		if(empty($this->cmd_f_add))
+		{
+			//bug:prepare中如果有返回值，则再次执行会报错。无论是否取完都无法再次执行。
+			$sql = "
+					insert into up6_files(
+					 f_id
+					,f_pid
+					,f_pidRoot
+					,f_fdTask
+					,f_fdChild
+					,f_uid
+					,f_nameLoc
+					,f_nameSvr
+					,f_pathLoc
+					,f_pathSvr
+					,f_pathRel
+					,f_md5
+					,f_lenLoc
+					,f_sizeLoc
+					,f_lenSvr
+					,f_perSvr
+					,f_complete
+					)
+					values(
+					 :id
+					,:pid
+					,:pidRoot
+					,:fdTask
+					,:fdChild
+					,:uid
+					,:nameLoc
+					,:nameSvr
+					,:pathLoc
+					,:pathSvr
+					,:pathRel
+					,:md5
+					,:lenLoc
+					,:sizeLoc
+					,:lenSvr
+					,:perSvr
+					,:complete
+					)
+					";
+			$con = $this->con_utf8;
+			$cmd = $con->prepare($sql);
+			$this->cmd_f_add = $cmd;
+		}
+		$cmd = $this->cmd_f_add;
+		$cmd->bindParam(":id", $inf->id );
+		$cmd->bindValue(":pid", $inf->pid );
+		$cmd->bindValue(":pidRoot", $inf->pidRoot );
+		$cmd->bindValue(":fdTask", $inf->fdTask,PDO::PARAM_BOOL);		
+		$cmd->bindValue(":fdChild", $inf->fdChild,PDO::PARAM_BOOL);//是文件夹中的文件
+		$cmd->bindValue(":uid", $inf->uid,PDO::PARAM_INT);
+		$cmd->bindParam(":nameLoc", $inf->nameLoc);
+		$cmd->bindParam(":nameSvr", $inf->nameSvr);
+		$cmd->bindParam(":pathLoc", $inf->pathLoc);
+		$cmd->bindParam(":pathSvr", $inf->pathSvr);
+		$cmd->bindParam(":md5", $inf->md5);
+		$cmd->bindValue(":lenLoc", $inf->lenLoc);
+		$cmd->bindParam(":sizeLoc", $inf->sizeLoc);
+		$cmd->bindValue(":lenSvr", 0);
+		$cmd->bindParam(":perSvr", $inf->perSvr);
+		$cmd->bindValue(":complete", $inf->complete);
+		if($inf->lenLoc ==0 )
+		{
+			$cmd->bindValue(":lenSvr", $inf->lenLoc);
+			$cmd->bindValue(":perSvr", "100%");
+			$cmd->bindValue(":complete", true,PDO::PARAM_BOOL);
+		}
+		
+		if(!$cmd->execute())
+		{
+			print_r($cmd->errorInfo());
+		}
+	}
+	
+	function add_folder($inf/*FileInf*/)
+	{
+
+		if(empty($this->cmd_fd_add))
+		{
+			//bug:prepare中如果有返回值，则再次执行会报错。无论是否取完都无法再次执行。
+			$sql = "
+					insert into up6_folders(
+					 fd_id
+					,fd_name
+					,fd_pid
+					,fd_uid
+					,fd_files
+					,fd_folders
+					,fd_pidRoot
+					)
+					values(
+					 :id
+					,:name
+					,:pid
+					,:uid
+					,:files
+					,:folders
+					,:pidRoot
+					)
+					";
+			$con = $this->con_utf8;
+			$cmd = $con->prepare($sql);
+			$this->cmd_fd_add = $cmd;
+		}
+		$cmd = $this->cmd_fd_add;
+		$cmd->bindParam(":id", $inf->id );
+		$cmd->bindValue(":pid", $inf->pid );
+		$cmd->bindValue(":pidRoot", $inf->pidRoot );
+		$cmd->bindValue(":name", $inf->nameLoc);
+		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
+		$cmd->bindValue(":files", 0);
+		$cmd->bindParam(":folders", 0);
+		
+		if(!$cmd->execute())
+		{
+			print_r($cmd->errorInfo());
+		}
+	}
 
 	function f_update(&$inf/*FileInf*/)
 	{
@@ -106,30 +231,7 @@ class FdDataWriter
 			print_r($cmd->errorInfo());
 		}
 	}
-	
-	/*
-	 * 测试：插入200条数据大约需要6秒
-	 * 使用独立连接
-	 * 文件ID列表：$ret["ids_f"]
-	 * 文件夹ID列表：$ret["ids_fd"]
-	 * */
-	function make_ids_batch($files,$folders)
-	{
-		$con = $this->db->GetConUtf8();
-		$cmd = $con->prepare("call fd_files_add_batch(:files,:folders);");
-		$cmd->bindValue(":files", $files,PDO::PARAM_INT);
-		$cmd->bindValue(":folders", $folders,PDO::PARAM_INT);
-		if($cmd->execute())
-		{
-			$ret = $cmd->fetch(PDO::FETCH_ASSOC);
-			return $ret;
-		}
-		else
-		{
-			print_r($cmd->errorInfo());
-		}
-	}
-	
+		
 	/**
 	 * 更新单个文件夹数据
 	 * 使用共用数据库连接
