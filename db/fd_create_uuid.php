@@ -115,8 +115,6 @@ $fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
 $fd_writer = new FdDataWriter();
 
-$fd_map = array();
-$fd_map[$fdroot->id] = $fdroot;
 $svr_folders = array();
 
 //解析文件夹
@@ -130,14 +128,12 @@ foreach($folders as $folder)
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
 	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
-	$fd->pathRel 	= PathTool::unicode_decode($folder["pathRel"]);
-	$fd_parent 		= $fd_map[$fd->pid];			
-	$fd->pathSvr 	= PathTool::combin($fd_parent->pathSvr,$fd->nameLoc);
+	$fd->pathRel 	= PathTool::unicode_decode($folder["pathRel"]);				
+	$fd->pathSvr 	= PathTool::combin($fdroot->pathSvr,$fd->pathRel);
 	$pb->createFolder($fd->pathSvr);//自动创建文件夹	
 	//更新文件夹数据
 	$fd_writer->add_folder($fd);
 	
-	$fd_map[$fd->id] = $fd;
 	array_push($svr_folders,$fd);
 }
 
@@ -161,9 +157,8 @@ foreach($files as $file)
 	$f->sizeLoc		= $file["sizeLoc"];
 	$f->lenSvr		= $file["lenSvr"];
 	$f->md5			= $file["md5"];
-	$f->uid			= intval($uid);
-	$f_parent 		= $fd_map[$f->pid];
-	$f->pathSvr		= PathTool::combin( $f_parent->pathSvr , $f->nameLoc);	
+	$f->uid			= intval($uid);	
+	$f->pathSvr		= PathTool::combin( $fdroot->pathSvr , $f->pathRel);	
 		
 	$fd_writer->add_file($f);//添加到数据库
 	
