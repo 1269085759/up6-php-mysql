@@ -424,7 +424,7 @@ class DBFile
 	/// 文件名称，本地路径，远程路径，相对路径都使用原始字符串。
 	/// d:\soft\QQ2012.exe
 	/// </summary>
-	function Add(&$model/*xdb_files*/)
+	function Add(&$model/*FileInf*/)
 	{
 		$sb = "insert into up6_files(";
 		$sb = $sb . " f_id";
@@ -471,8 +471,8 @@ class DBFile
 		
 		$cmd->bindParam(":f_id",$model->id);
 		$cmd->bindParam(":f_sizeLoc",$model->sizeLoc);
-		$cmd->bindValue(":f_pos",$model->FilePos,PDO::PARAM_INT);
-		$cmd->bindValue(":f_lenSvr",$model->lenSvr,PDO::PARAM_INT);
+		$cmd->bindValue(":f_pos",0);
+		$cmd->bindValue(":f_lenSvr",$model->lenSvr);
 		$cmd->bindParam(":f_perSvr",$model->perSvr);
 		$cmd->bindValue(":f_complete",$model->complete,PDO::PARAM_BOOL);//fix(2016-05-24):必须指名类型，否则无法插入数据
 		$cmd->bindValue(":f_uid",$model->uid,PDO::PARAM_INT);
@@ -482,7 +482,7 @@ class DBFile
 		$cmd->bindParam(":f_pathSvr",$model->pathSvr);
 		$cmd->bindParam(":f_pathRel",$model->pathRel);
 		$cmd->bindParam(":f_md5",$model->md5);
-		$cmd->bindValue(":f_lenLoc",$model->lenLoc,PDO::PARAM_INT);
+		$cmd->bindValue(":f_lenLoc",$model->lenLoc);
 
 		$db->ExecuteNonQuery($cmd);
 	}

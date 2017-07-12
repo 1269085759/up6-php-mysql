@@ -13,9 +13,10 @@ ob_start();
 */
 require('database/DbHelper.php');
 require('database/DBFile.php');
-require('model/xdb_files.php');
+require('model/FileInf.php');
 require('utils/FileResumer.php');
 require('utils/HttpHeader.php');
+require('utils/PathTool.php');
 
 
 $head = new HttpHeader();
