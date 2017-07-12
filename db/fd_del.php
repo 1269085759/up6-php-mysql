@@ -12,9 +12,8 @@ ob_start();
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
-require('UploaderCfg.php');
 
-$fid = $_GET["fid"];
+$fid = $_GET["id"];
 $uid = $_GET["uid"];
 $cbk = $_GET["callback"];//jsonp
 $ret = 0;
@@ -22,7 +21,7 @@ $ret = 0;
 //参数不为空
 if (	strlen($fid) > 0
 	||	strlen($uid) > 0 )
-{
+{	
 	DBFolder::Remove($fid,$uid);
 	$ret = 1;
 }
