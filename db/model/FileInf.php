@@ -18,11 +18,11 @@ class FileInf
 	/**
 	 * 表示当前项是否是一个文件夹项。
 	 */
-	var $fdTask;
+	var $fdTask = false;
 	/// <summary>
 	/// 是否是文件夹中的子文件
 	/// </summary>
-	var $fdChild;
+	var $fdChild = false;
 	/**
 	 * 用户ID。与第三方系统整合使用。
 	 */

@@ -113,7 +113,10 @@ $fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
 $pb = new PathUuidBuilder();
 $fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
 
+
 $fd_writer = new FdDataWriter();
+$fd_writer->add_folder($fdroot);//添加根目录
+$fd_writer->add_file($fdroot);//
 
 $svr_folders = array();
 
@@ -131,7 +134,7 @@ foreach($folders as $folder)
 	$fd->pathRel 	= PathTool::unicode_decode($folder["pathRel"]);				
 	$fd->pathSvr 	= PathTool::combin($fdroot->pathSvr,$fd->pathRel);
 	$pb->createFolder($fd->pathSvr);//自动创建文件夹	
-	//更新文件夹数据
+	//添加文件夹
 	$fd_writer->add_folder($fd);
 	
 	$svr_folders[] = $fd;
@@ -153,6 +156,7 @@ foreach($files as $file)
 	$f->id			= $file["id"];
 	$f->pid			= $file["pid"];
 	$f->pidRoot		= $file["pidRoot"];
+	$f->fdChild		= true;
 	$f->lenLoc		= $file["lenLoc"];
 	$f->sizeLoc		= $file["sizeLoc"];
 	$f->lenSvr		= $file["lenSvr"];

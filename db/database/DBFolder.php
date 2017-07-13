@@ -67,7 +67,7 @@ class DBFolder
 	 */
 	function Complete($id,$uid)
 	{		
-		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where f_id=:f_id and f_uid=:f_uid;";
+		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_complete=1,f_perSvr='100%' where (f_id=:f_id or f_pidRoot=:f_id)and f_uid=:f_uid;";
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
 		$cmd->bindValue(":f_id",$id);
