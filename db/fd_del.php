@@ -14,17 +14,16 @@ require('database/DBFile.php');
 require('database/DBFolder.php');
 
 $fid = $_GET["id"];
-$uid = $_GET["uid"];
 $cbk = $_GET["callback"];//jsonp
 $ret = 0;
 
 //参数不为空
-if (	strlen($fid) > 0
-	||	strlen($uid) > 0 )
+if (	strlen($fid) > 0 )
 {	
-	DBFolder::Remove($fid,$uid);
+	$db = new DBFolder();
+	$db->Remove($fid);
 	$ret = 1;
 }
-echo "$cbk($ret)";
+echo "$cbk({\"value\":$ret})";
 header('Content-Length: ' . ob_get_length());
 ?>

@@ -75,7 +75,7 @@ class DBFolder
 		$db->ExecuteNonQuery($cmd);		
 	}
 
-	function Remove($fid,$uid)
+	function Remove($fid)
 	{
 		$sql = "update up6_files set f_delete=1 where f_id=:id";		
 		$db = new DbHelper();
@@ -83,10 +83,9 @@ class DBFolder
 		$cmd->bindValue(":id",$fid);		
 		$db->ExecuteNonQuery($cmd);
 		
-		$sql = "update up6_folders set fd_delete=1 where fd_id=:fd_id and fd_uid=:fd_uid;";		
+		$sql = "update up6_folders set fd_delete=1 where fd_id=:fd_id";		
 		$cmd =& $db->GetCommand($sql);
 		$cmd->bindParam(":fd_id",$fid);
-		$cmd->bindParam(":fd_uid",$uid);
 		$db->ExecuteNonQuery($cmd);
 	}
 
