@@ -87,7 +87,7 @@ class FdDataWriter
 		$cmd->bindParam(":sizeLoc", $inf->sizeLoc);
 		$cmd->bindValue(":lenSvr", 0);
 		$cmd->bindParam(":perSvr", $inf->perSvr);
-		$cmd->bindValue(":complete", $inf->complete);
+		$cmd->bindValue(":complete", false,PDO::PARAM_BOOL);
 		if($inf->lenLoc ==0 )
 		{
 			$cmd->bindValue(":lenSvr", $inf->lenLoc);
@@ -112,7 +112,6 @@ class FdDataWriter
 					 fd_id
 					,fd_name
 					,fd_pid
-					,fd_pidRoot
 					,fd_pathSvr
 					,fd_pathRel
 					,fd_uid
@@ -123,7 +122,6 @@ class FdDataWriter
 					 :id
 					,:name
 					,:pid
-					,:pidRoot
 					,:pathSvr
 					,:pathRel
 					,:uid
@@ -137,11 +135,10 @@ class FdDataWriter
 		}
 		$cmd = $this->cmd_fd_add;
 		$cmd->bindParam(":id", $inf->id );
+		$cmd->bindValue(":name", $inf->nameLoc);
 		$cmd->bindValue(":pid", $inf->pid );
-		$cmd->bindValue(":pidRoot", $inf->pidRoot );
 		$cmd->bindValue(":pathSvr", $inf->pathSvr);
 		$cmd->bindValue(":pathRel", $inf->pathRel );
-		$cmd->bindValue(":name", $inf->nameLoc);
 		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
 		$cmd->bindValue(":files", 0);
 		$cmd->bindValue(":folders", 0);
