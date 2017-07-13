@@ -99,15 +99,12 @@ $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uidTxt);
 $fdroot->pathSvr 	= $jsonArr["pathSvr"];
 $fdroot->pathLoc 	= $jsonArr["pathLoc"];
-$fdroot->complete	= $jsonArr["complete"];  
-
+//对空文件夹的处理，或0字节文件夹的处理
+if( $fdroot->lenLoc == "0") $fdroot->complete = true;
 $fd_writer = new FdDataWriter();
 
-//对空文件夹的处理，或0字节文件夹的处理
-if($fdroot->lenLoc == "0")
-{
-	$fdroot->complete = true;	
-}
+$fd_writer->add_folder($fdroot);//添加根目录
+$fd_writer->add_file($fdroot);//
 
 $arrFolders = array();
 
