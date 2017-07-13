@@ -108,6 +108,7 @@ $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
 $fdroot->pathSvr 	= "";
 $fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
+if( $fdroot->lenLoc == "0") $fdroot->complete = true;
 
 //创建文件夹
 $pb = new PathUuidBuilder();
