@@ -43,6 +43,7 @@ var HttpUploaderState = {
 	None: 7,
 	Waiting: 8
 	,MD5Working:9
+    , scan: 10
 };
 
 function getRoot()
@@ -516,6 +517,14 @@ function HttpUploaderMgr()
         var p = this.filesMap[json.id];
         p.post_stoped(json);
     };
+    this.scan_process = function (json) {
+        var p = this.filesMap[json.id];
+        p.scan_process(json);
+    };
+    this.scan_complete = function (json) {
+        var p = this.filesMap[json.id];
+        p.scan_complete(json);
+    };
 	this.md5_process = function (json)
 	{
 	    var p = this.filesMap[json.id];
@@ -559,6 +568,8 @@ function HttpUploaderMgr()
 	    else if (json.name == "post_error") { _this.post_error(json); }
 	    else if (json.name == "post_complete") { _this.post_complete(json); }
 	    else if (json.name == "post_stoped") { _this.post_stoped(json); }
+	    else if (json.name == "scan_process") { _this.scan_process(json); }
+	    else if (json.name == "scan_complete") { _this.scan_complete(json); }
 	    else if (json.name == "md5_process") { _this.md5_process(json); }
 	    else if (json.name == "md5_complete") { _this.md5_complete(json); }
 	    else if (json.name == "md5_error") { _this.md5_error(json); }
@@ -1046,15 +1057,15 @@ function HttpUploaderMgr()
 		var btnStop     = ui.find("a[name='stop']");
 		var btnDel      = ui.find("a[name='del']");
 		var divPercent	= ui.find("div[name='percent']");
-		var ui_eles = { msg: divMsg, process: divProcess, percent: divPercent, btn: { del: btnDel, cancel: btnCancel, post: btnPost, stop: btnStop }, split: sp, div: ui };
+		var ui_eles = { msg: divMsg,size:uiSize, process: divProcess, percent: divPercent, btn: { del: btnDel, cancel: btnCancel, post: btnPost, stop: btnStop }, split: sp, div: ui };
 
-		divPercent.text("("+fdLoc.perSvr+")");
+		divPercent.text("(0%)");
 		divProcess.css("width",fdLoc.perSvr);
 		divMsg.text("");
 		//if(fdLoc.fdName != null) fdLoc.name = fdLoc.fdName;
 		uiName.text(fdLoc.nameLoc);
 		uiName.attr("title", fdLoc.nameLoc + "\n文件：" + fdLoc.files.length + "\n文件夹：" + fdLoc.foldersCount + "\n大小：" + fdLoc.sizeLoc);
-		uiSize.text(fdLoc.sizeLoc);
+		uiSize.text("0字节");
 
 		var fdTask = new FolderUploader( fdLoc, this);
 		this.filesMap[fdLoc.id] = fdTask;//添加到映射表
@@ -1094,7 +1105,8 @@ function HttpUploaderMgr()
 	this.ResumeFolder = function (fileSvr)
 	{
 	    var fd = this.addFolderLoc(fileSvr);
-		fd.folderInit = true;
+        fd.folderInit = true;
+        fd.Scaned = true;
 	    //
 		if (null == fileSvr.files)
 		{
