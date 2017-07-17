@@ -11,7 +11,7 @@ function FolderUploader(fdLoc, mgr)
     this.isFolder = true; //是文件夹
     this.folderInit = false;//文件夹已初始化
     this.Scaned = false;//是否已经扫描
-    this.folderSvr = { nameLoc: "",nameSvr:"",lenLoc:0,sizeLoc: "0byte", lenSvr: 0,perSvr:"0%", id:"",uid: 0, foldersCount: 0, filesCount: 0, filesComplete: 0, pathLoc: "", pathSvr: "", pathRel: "", pidRoot: 0, fdTask:true,complete: false, folders: [], files: [] };
+    this.folderSvr = { nameLoc: "",nameSvr:"",lenLoc:0,sizeLoc: "0byte", lenSvr: 0,perSvr:"0%", id:"",uid: 0, foldersCount: 0, filesCount: 0, filesComplete: 0, pathLoc: "", pathSvr: "", pathRel: "", pidRoot: "", complete: false, folders: [], files: [] };
     jQuery.extend(true,this.folderSvr, fdLoc);//续传信息
     this.manager = mgr;
     this.event = mgr.event;
@@ -156,7 +156,6 @@ function FolderUploader(fdLoc, mgr)
         //文件大小超过限制,文件大小为0
         if (4 == json.value || 5 == json.value){}
         if (6 == json.value) { this.ui.msg.text("文件被占用:" + json.pathLoc); }
-        debugMsg(JSON.stringify(json));
 
         this.ui.btn.stop.hide();
         this.ui.btn.post.show();
@@ -285,7 +284,7 @@ function FolderUploader(fdLoc, mgr)
 			, dataType: 'jsonp'
 			, jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 			, url: this.Config["UrlFdComplete"]
-			, data: { uid: this.fields["uid"], id_folder: this.folderSvr.fdID,id_file:this.folderSvr.idFile, time: new Date().getTime() }
+			, data: { uid: this.fields["uid"], id: this.id, time: new Date().getTime() }
 			, success: function (msg)
 			{
 			    //添加到文件列表

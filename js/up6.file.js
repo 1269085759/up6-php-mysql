@@ -86,7 +86,6 @@ function FileUploader(fileLoc, mgr)
     };
     this.post_process = function (json)
     {
-        //debugMsg("127-file-this.post_process");
         this.fileSvr.lenSvr = json.lenSvr;//保存上传进度
         this.fileSvr.perSvr = json.percent;
         this.ui.percent.text("("+json.percent+")");

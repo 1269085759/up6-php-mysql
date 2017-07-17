@@ -357,7 +357,7 @@ function HttpUploaderMgr()
 				, dataType: 'jsonp'
 				, jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 				, url: this.Config["UrlFdDel"]
-				, data: { uid: fileSvr.uid, id: fileSvr.id,time: new Date().getTime() }
+				, data: { uid: fileSvr.uid, id: fileSvr.id,fd_id:fileSvr.id, time: new Date().getTime() }
 			    , success:function (msg){if (msg.value == 1){ui.empty();}}
 			    , error: function () { alert("发送删除文件信息失败！"); }
 			    , complete: function (req, sta) { req = null; }
@@ -1107,6 +1107,8 @@ function HttpUploaderMgr()
 	    var fd = this.addFolderLoc(fileSvr);
         fd.folderInit = true;
         fd.Scaned = true;
+        fd.ui.size.text(fileSvr.sizeLoc);
+        fd.ui.percent.text(fileSvr.perSvr);
 	    //
 		if (null == fileSvr.files)
 		{
