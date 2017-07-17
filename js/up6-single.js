@@ -94,7 +94,7 @@ function HttpUploaderMgr()
         , edge: {protocol:"up6",port:9100,visible:false}
         , exe: { path: "http://www.ncmem.com/download/up6.2/guid/up6.exe" }
 		, "SetupPath": "http://localhost:4955/demoAccess/js/setup.htm"
-        , "Fields": {"uname": "test","upass": "test","uid":"0","fid":"0"}
+        , "Fields": {"uname": "test","upass": "test","uid":"0"}
 	};
 
     //biz event
