@@ -30,7 +30,7 @@ if (   (strlen($id)>0)
 	)
 {	
 	$db = new DBFile();
-	$db->f_process($uid, $id, $offset, $lenSvr, perSvr);
+	$db->f_process($uid, $id, $offset, $lenSvr, $perSvr);
 	$json = "$cbk({\"state\":1})";	
 }
 echo $json;
