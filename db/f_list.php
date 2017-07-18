@@ -20,6 +20,7 @@ if( strlen($uid) > 0)
 	if( !empty($json) )
 	{
 		//echo $json;
+		$json = urldecode($json);
 		$json = urlencode($json);
 		$json = str_replace("+","%20",$json);
 		echo "$cbk({\"value\":\"$json\"})";

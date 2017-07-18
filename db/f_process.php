@@ -19,6 +19,7 @@ $uid	 	= $_GET["uid"];
 $offset		= $_GET["offset"];
 $lenSvr		= $_GET["lenSvr"];
 $perSvr		= $_GET["perSvr"];
+$perSvr		= str_replace("+", " ", $perSvr);
 $cbk		= $_GET["callback"];
 
 $json = "$cbk({'state':0})";

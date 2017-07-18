@@ -113,7 +113,7 @@ function HttpUploaderMgr()
 		//文件操作相关
 		, "UrlCreate"		: "http://localhost:811/up6/db/f_create.php"
 		, "UrlPost"			: "http://localhost:811/up6/db/f_post.php"
-        , "UrlProcess"		: "http://localhost:811/up6/db/f_process.aspx"
+        , "UrlProcess"		: "http://localhost:811/up6/db/f_process.php"
 		, "UrlComplete"		: "http://localhost:811/up6/db/f_complete.php"
 		, "UrlList"			: "http://localhost:811/up6/db/f_list.php"
 		, "UrlDel"			: "http://localhost:811/up6/db/f_del.php"
