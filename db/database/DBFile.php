@@ -207,7 +207,7 @@ class DBFile
 			$f->md5 		= $row["f_md5"];
 			$f->lenLoc 		= $row["f_lenLoc"];
 			$f->sizeLoc 	= $row["f_sizeLoc"];
-			$f->FilePos 	= $row["f_pos"];
+			$f->offset 		= $row["f_pos"];
 			$f->lenSvr 		= $row["f_lenSvr"];
 			$f->perSvr 		= $row["f_perSvr"];
 			$f->complete 	= false;
@@ -719,7 +719,7 @@ class DBFile
 	function Complete($md5)
 	{
 		$db = new DbHelper();
-		$cmd =& $db->GetCommand("update up6_files set f_perSvr='100%',f_complete=1 where f_md5=:f_md5;");
+		$cmd =& $db->GetCommand("update up6_files set f_lenSvr=f_lenLoc,f_perSvr='100%',f_complete=1 where f_md5=:f_md5;");
 		$cmd->bindParam(":f_md5",$md5);
 		$db->ExecuteNonQuery($cmd);
 	}

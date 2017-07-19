@@ -49,7 +49,7 @@ function HttpUploaderMgr()
 	this.Config = {
 		  "EncodeType"		: "utf-8"
 		, "Company"			: "荆门泽优软件有限公司"
-		, "Version"			: "2,7,108,51163"
+		, "Version"			: "2,7,108,51167"
 		, "License"			: ""//
 		, "Authenticate"	: ""//域验证方式：basic,ntlm
 		, "AuthName"		: ""//域帐号
@@ -72,7 +72,7 @@ function HttpUploaderMgr()
 		//文件操作相关
 		, "UrlCreate"		: "http://localhost:811/up6/db/f_create.php"
 		, "UrlPost"			: "http://localhost:811/up6/db/f_post.php"
-        , "UrlProcess"		: "http://localhost:811/up6/db/f_process.aspx"
+        , "UrlProcess"		: "http://localhost:811/up6/db/f_process.php"
 		, "UrlComplete"		: "http://localhost:811/up6/db/f_complete.php"
 		, "UrlList"			: "http://localhost:811/up6/db/f_list.php"
 		, "UrlDel"			: "http://localhost:811/up6/db/f_del.php"

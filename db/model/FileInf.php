@@ -70,7 +70,7 @@ class FileInf
 	/**
 	 * 已上传百分比。示例：10%
 	 */
-	var $perSvr="";
+	var $perSvr="0%";
 	var $complete=false;
 	var $PostedTime;
 	var $deleted=false;

@@ -1,6 +1,6 @@
 <?php
 require('database/DbHelper.php');
-require('inc.php');
+//require('inc.php');
 /**
 	数据库初始化
 	更新记录：
@@ -10,7 +10,7 @@ require('inc.php');
 $rootDir = dirname(dirname(__FILE__));
 $sqlDir = "$rootDir\\sql";
 $downDir = "$rootDir\\sql.down";
-echo "SQL脚本路径：$sqlDir<br/>";
+//echo "SQL脚本路径：$sqlDir<br/>";
 $files = scandir($sqlDir);
 $db = new DbHelper();
 //清理操作
@@ -37,7 +37,7 @@ for( $i = 0 , $l = count($files);$i<$l;++$i)
 	{
 		$sql = file_get_contents($f);
 		$cmd->exec($sql);
-		echo "执行 $f 成功<br/>";
+		//echo "执行 $f 成功<br/>";
 	}	
 }
 
@@ -50,8 +50,8 @@ for( $i = 0 , $l = count($files);$i<$l;++$i)
 	{
 		$sql = file_get_contents($f);
 		$cmd->exec($sql);
-		echo "执行 $f 成功<br/>";
+		//echo "执行 $f 成功<br/>";
 	}
 }
 ?>
-<p>数据库初始化完毕！</p>
+<!--<p>数据库初始化完毕！</p>-->
