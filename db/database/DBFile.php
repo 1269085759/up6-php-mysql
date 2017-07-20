@@ -88,79 +88,6 @@ class DBFile
 			array_push($files,$f);
 		}
 	}
-	
-	static function GetAllUnComplete2($uid)
-    {
-        $sb = "";
-        $sb .= "select ";
-        $sb .=" up6_files.f_id";//1
-        $sb .=",up6_files.f_pid";//2
-        $sb .=",up6_files.f_fdTask";//3
-        $sb .=",up6_files.f_fdID";//4
-        $sb .=",up6_files.f_fdChild";//5
-        $sb .=",up6_files.f_pidRoot";//6
-        $sb .=",up6_files.f_nameLoc";//7
-        $sb .=",up6_files.f_pathLoc";//8
-        $sb .=",up6_files.f_md5";//9
-        $sb .=",up6_files.f_lenLoc";//10
-        $sb .=",up6_files.f_sizeLoc";//11
-        $sb .=",up6_files.f_pos";//12
-        $sb .=",up6_files.f_lenSvr";//13
-        $sb .=",up6_files.f_perSvr";//14
-        $sb .=",up6_files.f_complete";//15
-        $sb .=",up6_files.f_pathSvr";//16 //fix(2015-03-19):修复无法续传文件的问题。
-        //文件夹字段
-        $sb .=",up6_folders.fd_name";//17
-        $sb .=",up6_folders.fd_length";//18
-        $sb .=",up6_folders.fd_size";//19
-        $sb .=",up6_folders.fd_pid";//20
-        $sb .=",up6_folders.fd_pathLoc";//21
-        $sb .=",up6_folders.fd_pathSvr";//22
-        $sb .=",up6_folders.fd_folders";//23
-        $sb .=",up6_folders.fd_files";//24
-        $sb .=",up6_folders.fd_filesComplete";//25
-        //
-        $sb .=" from up6_files ";
-        //
-        $sb .=" left join up6_folders ";
-        $sb .=" on up6_files.f_fdID = up6_folders.fd_id";
-        //
-        $sb .=" where up6_files.f_uid=:f_uid and up6_files.f_deleted=0 and up6_files.f_complete=0";
-
-        $db = new DbHelper();
-        $cmd =& $db->GetCommand($sb);
-		
-		$db->ExecuteNonQueryConTxt("set names utf8");
-		
-		$cmd->bindParam(":f_uid",$uid);
-		$ret = $db->ExecuteDataSet($cmd);
-        $ub = new uc_builder();
-		
-		foreach($ret as $row)
-        {
-			$pidRoot = (int)$row["f_pidRoot"];//
-			$fd_id = (int)$row["f_fdID"];
-			
-			//是一个子文件
-			if ($pidRoot != 0)
-			{
-				$ub->add_child($row, $pidRoot);
-			}//是一个文件项
-			else
-			{
-				$ub->add_file($row, $uid);
-			}
-
-			//同时也是一个文件夹
-			if ($fd_id > 0)
-			{
-				$ub->update_folder($row, $fd_id);
-			}
-        }
-        
-
-        return $ub->to_json();//
-    }
 
 	/// <summary>
 	/// 获取所有文件和文件夹列表，不包含子文件夹，包含已上传完的和未上传完的
@@ -201,9 +128,9 @@ class DBFile
 			$f->uid			= $f_uid;
 			$f->id 			= $row["f_id"];
 			$f->fdTask 		= (bool)($row["f_fdTask"]);
-			$f->nameLoc 	= $row["f_nameLoc"];
-			$f->pathLoc 	= $row["f_pathLoc"];
-			$f->pathSvr		= $row["f_pathSvr"];
+			$f->nameLoc 	= PathTool::urlencode_safe( $row["f_nameLoc"] );
+			$f->pathLoc 	= PathTool::urlencode_safe( $row["f_pathLoc"] );
+			$f->pathSvr		= PathTool::urlencode_safe( $row["f_pathSvr"] );
 			$f->md5 		= $row["f_md5"];
 			$f->lenLoc 		= $row["f_lenLoc"];
 			$f->sizeLoc 	= $row["f_sizeLoc"];
