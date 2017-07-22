@@ -106,6 +106,7 @@ $fdroot->sizeLoc	= str_replace("+", " ", $fdroot->sizeLoc);
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
+$fdroot->pidRoot	= $fdroot->id;
 $fdroot->pathSvr 	= "";
 $fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
 if( $fdroot->lenLoc == "0") $fdroot->complete = true;
@@ -113,7 +114,7 @@ if( $fdroot->lenLoc == "0") $fdroot->complete = true;
 //创建文件夹
 $pb = new PathUuidBuilder();
 $fdroot->pathSvr = PathTool::to_utf8( $pb->genFolder($uid, $fdroot) );
-
+$fdroot->pathSvr = str_replace("\\", "/", $fdroot->pathSvr);
 
 $fd_writer = new FdDataWriter();
 $fd_writer->add_folder($fdroot);//添加根目录
@@ -128,7 +129,7 @@ foreach($folders as $folder)
 	$fd->nameLoc	= PathTool::unicode_decode( $folder["nameLoc"] );
 	$fd->id 		= $folder["id"];
 	$fd->pid 		= $folder["pid"];
-	$fd->pidRoot 	= $folder["pidRoot"];
+	$fd->pidRoot 	= $fdroot->id;
 	$fd->uid 		= (int)$uid;
 	$fd->lenLoc		= 0;
 	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
@@ -163,7 +164,8 @@ foreach($files as $file)
 	$f->lenSvr		= $file["lenSvr"];
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uid);	
-	$f->pathSvr		= PathTool::combin( $fdroot->pathSvr , $f->pathRel);	
+	$f->pathSvr		= PathTool::combin( $fdroot->pathSvr , $f->pathRel);
+	$f->pathSvr		= str_replace("\\", "/", $f->pathSvr);
 		
 	$fd_writer->add_file($f);//添加到数据库
 	

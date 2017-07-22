@@ -108,23 +108,23 @@ class FdDataWriter
 			$sql = "
 					insert into up6_folders(
 					 fd_id
-					,fd_name
 					,fd_pid
+					,fd_pidRoot
+					,fd_uid
+					,fd_name
+					,fd_pathLoc
 					,fd_pathSvr
 					,fd_pathRel
-					,fd_uid
-					,fd_files
-					,fd_folders
 					)
 					values(
 					 :id
-					,:name
 					,:pid
+					,:pidRoot
+					,:uid
+					,:name
+					,:pathLoc
 					,:pathSvr
 					,:pathRel
-					,:uid
-					,:files
-					,:folders
 					)
 					";
 			$con = $this->con_utf8;
@@ -133,13 +133,13 @@ class FdDataWriter
 		}
 		$cmd = $this->cmd_fd_add;
 		$cmd->bindParam(":id", $inf->id );
-		$cmd->bindValue(":name", $inf->nameLoc);
 		$cmd->bindValue(":pid", $inf->pid );
+		$cmd->bindValue(":pidRoot", $inf->pidRoot);
+		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
+		$cmd->bindValue(":name", $inf->nameLoc);
+		$cmd->bindValue(":pathLoc", $inf->pathSvr);
 		$cmd->bindValue(":pathSvr", $inf->pathSvr);
 		$cmd->bindValue(":pathRel", $inf->pathRel );
-		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
-		$cmd->bindValue(":files", 0);
-		$cmd->bindValue(":folders", 0);
 		
 		if(!$cmd->execute())
 		{
