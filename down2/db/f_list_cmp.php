@@ -1,9 +1,10 @@
 <?php
 /*从up6_files表中加载所有已经上传完成的文件和文件夹*/
 header('Content-Type: text/html;charset=utf-8');
-require('../../utils/inc.php');
+require('../../db/utils/inc.php');
 require('../../db/database/DbHelper.php');
-require('../../db/PathTool.php');
+require('../../db/utils/PathTool.php');
+require('../../db/model/FileInf.php');
 require('../model/DnFileInf.php');
 require('../biz/DnFile.php');
 
