@@ -1,21 +1,21 @@
 <?php
 require('../../db/database/DbHelper.php');
 require('../../db/PathTool.php');
+require('../../model/FileInf.php');
 require('../model/DnFileInf.php');
-require('../biz/cmp_file.php');
-require('../biz/un_file.php');
-require('../biz/un_builder.php');
 
-$uid = $_GET["uid"];
-$cbk = $_GET["callback"];//jsonp
+$uid 	= $_GET["uid"];
+$cbk 	= $_GET["callback"];//jsonp
+$json 	= "$cbk({\"value\":null})";
 
 if ( strlen($uid)>0 )
 {
-	$fd = new un_builder();
-	$json = $fd->read($uid);
+	$db = new DnFile();
+	$json = $db->all_uncmp( $uid);	
 	
 	if( !empty($json) )
 	{
+		$json = urldecode($json);//还原汉字
 		$json = urlencode($json);
 		$json = str_replace("+","%20",$json);//
 		$json = "$cbk({\"value\":\"$json\"})";
@@ -24,5 +24,5 @@ if ( strlen($uid)>0 )
 	}
 }
 
-echo $cbk . "({\"value\":null})";
+echo $json;
 ?>

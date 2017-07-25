@@ -108,14 +108,53 @@ class DnFile
 		foreach($ret as $row)
 		{
 			$f = new DnFileInf();
-			$f->id 			= new_guid();
-			$f->f_id 		= $row["f_id"];
-			$f->f_fdTask 	= $row["f_fdTask"];
-			$f->nameLoc 	= PathTool::urlencode_path( $row["f_nameLoc"] );
-			$f->sizeLoc 	= $row["f_sizeLoc"];
-			$f->sizeSvr		= $row["f_sizeLoc"];
-			$f->lenSvr 		= $row["f_lenSvr"];
-			$f->pathSvr		= PathTool::urlencode_path( $row["f_pathSvr"] );
+			$f->id 		= new_guid();
+			$f->f_id 	= $row["f_id"];
+			$f->fdTask 	= $row["f_fdTask"];
+			$f->nameLoc = PathTool::urlencode_path( $row["f_nameLoc"] );//防止汉字被转换成unicode
+			$f->sizeLoc = $row["f_sizeLoc"];
+			$f->sizeSvr	= $row["f_sizeLoc"];
+			$f->lenSvr 	= $row["f_lenSvr"];
+			$f->pathSvr	= PathTool::urlencode_path( $row["f_pathSvr"] );//防止汉字被转换成unicode
+		
+			$files[] = $f;
+		}
+		if( count($files) < 1 ) return "";
+		return json_encode($files);
+	}
+	
+	/**
+	 * 加载所有未下载完的文件和文件夹
+	 * @param unknown $uid
+	 * @return string
+	 */
+	function all_uncmp($uid)
+	{
+		$sql = 'select 
+				 f_id
+				,f_nameLoc
+				,f_pathLoc
+				,f_perLoc
+				,f_sizeSvr				
+				,f_fdTask
+				 from down_files
+				 where f_uid=:f_uid and f_complete=0;';
+		
+		$files = array();
+		$db = new DbHelper();
+		$cmd = $db->prepare_utf8($sql);
+				
+		$cmd->bindValue(":f_uid",$uid);
+		$ret = $db->ExecuteDataSet($cmd);
+		foreach($ret as $row)
+		{
+			$f = new DnFileInf();
+			$f->id 		= $row["f_id"];
+			$f->nameLoc = PathTool::urlencode_path( $row["f_nameLoc"] );//防止汉字被转换成unicode
+			$f->pathLoc = PathTool::urlencode_path( $row["f_pathLoc"] );//防止汉字被转换成unicode
+			$f->perLoc 	= $row["f_perLoc"];
+			$f->sizeSvr	= $row["f_sizeSvr"];			
+			$f->fdTask 	= $row["f_fdTask"];
 		
 			$files[] = $f;
 		}
