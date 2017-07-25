@@ -1,7 +1,7 @@
 <?php 
 require('../../db/DbHelper.php');
 require('../../db/PathTool.php');
-require('DnFile.php');
+require('../DnFile.php');
 require('../model/DnFileInf.php');
 
 $fid = $_GET["id"];

@@ -7,7 +7,7 @@
 
 require('../../db/inc.php');
 require('../../db/database/DbHelper.php');
-require('DnFile.php');
+require('../biz/DnFile.php');
 
 $db = new DnFile();
 $db->clear();
