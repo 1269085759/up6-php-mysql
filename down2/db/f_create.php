@@ -1,8 +1,9 @@
 <?php 
 require('../../db/database/DbHelper.php');
-require('../../db/PathTool.php');
-require('../biz/DnFile.php');
+require('../../db/utils/PathTool.php');
+require('../../db/model/FileInf.php');
 require('../model/DnFileInf.php');
+require('../biz/DnFile.php');
 
 $id 		= $_GET["id"];
 $uid 		= $_GET["uid"];

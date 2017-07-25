@@ -111,7 +111,7 @@ class DnFile
 			$f = new DnFileInf();
 			$f->id 		= new_guid();
 			$f->f_id 	= $row["f_id"];
-			$f->fdTask 	= $row["f_fdTask"];
+			$f->fdTask 	= (bool)$row["f_fdTask"];
 			$f->nameLoc = PathTool::urlencode_path( $row["f_nameLoc"] );//防止汉字被转换成unicode
 			$f->sizeLoc = $row["f_sizeLoc"];
 			$f->sizeSvr	= $row["f_sizeLoc"];
