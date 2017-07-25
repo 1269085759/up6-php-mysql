@@ -1,6 +1,6 @@
 <?php
-require('../../utils/HttpHeader.php');
-require('../../db/PathTool.php');
+require('../../db/utils/HttpHeader.php');
+require('../../db/utils/PathTool.php');
 
 $head = new HttpHeader();
 
@@ -13,11 +13,12 @@ $pathSvr	 = PathTool::urldecode_path($pathSvr);
 
 if ( empty($id) 
 	|| empty($blockIndex)
-	|| empty($blockOffset)
+	|| strlen($blockOffset) < 1
 	|| empty($blockSize)
 	|| empty($pathSvr) ) 
 {
-	die();
+	header('HTTP/1.1 500 param null');
+	return;
 }
 
 header("Cache-Control: public");
