@@ -3,6 +3,7 @@
  * 
 	更新记录：
 		2016-07-31 创建
+		2017-07-25 更新
 */
 class DnFile
 {
@@ -15,34 +16,34 @@ class DnFile
 
 	function Add($inf/*DnFileInf*/)
 	{
-		$idSvr = 0;		
-		$sql  = "insert into down_files(";
-		$sql .=" f_uid";
-		$sql .=",f_nameLoc";
-		$sql .=",f_pathLoc";
-		$sql .=",f_fileUrl";
-		$sql .=",f_lenSvr";
-		$sql .=",f_sizeSvr";
-		$sql .=") values(";
-		$sql .=" :f_uid";//uid
-		$sql .=",:f_nameLoc";//name
-		$sql .=",:f_pathLoc";//pathLoc
-		$sql .=",:f_fileUrl";//pathSvr
-		$sql .=",:f_lenSvr";//lenSvr
-		$sql .=",:f_sizeSvr";//sizeSvr
-		$sql .=")";
+		$sql  = 'insert into down_files(
+				 f_id
+				,f_uid
+				,f_nameLoc
+				,f_pathLoc				
+				,f_lenSvr
+				,f_sizeSvr
+				,f_fdTask
+				) values(
+				 :f_id
+				,:f_uid
+				,:f_nameLoc
+				,:f_pathLoc				
+				,:f_lenSvr
+				,:f_sizeSvr
+				,:f_fdTask
+				)';
 		
 		$cmd = $this->db->prepare_utf8( $sql );
 
+		$cmd->bindValue(":f_id",$inf->id);
 		$cmd->bindValue(":f_uid",$inf->uid,PDO::PARAM_INT);
 		$cmd->bindParam(":f_nameLoc",$inf->nameLoc);
-		$cmd->bindParam(":f_pathLoc",$inf->pathLoc);
-		$cmd->bindParam(":f_fileUrl",$inf->fileUrl);
+		$cmd->bindParam(":f_pathLoc",$inf->pathLoc);		
 		$cmd->bindValue(":f_lenSvr",$inf->lenSvr,PDO::PARAM_INT);
-		$cmd->bindParam(":f_sizeSvr",$inf->sizeSvr);					
-		$idSvr = $this->db->ExecuteGenKey($cmd,"f_id");
-
-		return $idSvr;
+		$cmd->bindParam(":f_sizeSvr",$inf->sizeSvr);
+		$cmd->bindParam(":f_fdTask",$inf->fdTask,PDO::PARAM_BOOL);
+		$this->db->ExecuteNonQuery($cmd );
 	}
 
 	/// <summary>
