@@ -61,17 +61,6 @@ class DnFile
 		$this->db->Execute($cmd);
 	}
 
-	//删除文件夹的所有子文件
-	function delFiles($pidRoot,$uid)
-	{
-		$sql = "delete from down_files where f_pidRoot=:f_pidRoot and f_uid=:f_uid";
-		$cmd = $this->db->prepare($sql);
-
-		$cmd->bindParam(":f_pidRoot", $pidRoot);
-		$cmd->bindParam(":f_uid", $uid);
-		$this->db->Execute($cmd);
-	}
-
 	/**
 	 * 更新文件进度信息
 	 * @param fid
@@ -95,6 +84,43 @@ class DnFile
 	function clear()
 	{
 		$this->db->ExecuteNonQueryTxt("truncate table down_files");
+	}
+	
+	function all_complete($uid)
+	{
+		$sql = 'select 
+				 f_id
+				,f_fdTask
+				,f_nameLoc
+				,f_sizeLoc
+				,f_lenSvr
+				,f_pathSvr
+				 from up6_files
+				 where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=1;';
+		
+		//取未完成的文件列表
+		//$files = array();
+		$db = new DbHelper();
+		$cmd = $db->prepare_utf8($sql);
+				
+		$cmd->bindValue(":f_uid",$uid);
+		$ret = $db->ExecuteDataSet($cmd);
+		foreach($ret as $row)
+		{
+			$f = new DnFileInf();
+			$f->id 			= new_guid();
+			$f->f_id 		= $row["f_id"];
+			$f->f_fdTask 	= $row["f_fdTask"];
+			$f->nameLoc 	= PathTool::urlencode_path( $row["f_nameLoc"] );
+			$f->sizeLoc 	= $row["f_sizeLoc"];
+			$f->sizeSvr		= $row["f_sizeLoc"];
+			$f->lenSvr 		= $row["f_lenSvr"];
+			$f->pathSvr		= PathTool::urlencode_path( $row["f_pathSvr"] );
+		
+			$files[] = $f;
+		}
+		if( count($files) < 1 ) return "";
+		return json_encode($files);
 	}
 }
 ?>

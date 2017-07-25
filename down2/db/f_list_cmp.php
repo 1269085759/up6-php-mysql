@@ -3,8 +3,7 @@ header('Content-Type: text/html;charset=utf-8');
 require('../../db/database/DbHelper.php');
 require('../../db/PathTool.php');
 require('../model/DnFileInf.php');
-require('../biz/cmp_file.php');
-require('../biz/cmp_builder.php');
+require('../biz/DnFile.php');
 
 $uid = $_GET["uid"];
 $cbk = $_GET["callback"];//jsonp
