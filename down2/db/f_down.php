@@ -1,6 +1,4 @@
 <?php
-require('../../db/database/DbHelper.php');
-require('../../db/database/DBFile.php');
 require('../../utils/HttpHeader.php');
 require('../../db/PathTool.php');
 
