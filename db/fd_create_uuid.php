@@ -86,14 +86,12 @@ $folders = array();
 if( !empty($jsonArr["folders"]) )
 {
 	$folders = $jsonArr["folders"];
-	array_remove_value($jsonArr,"folders");
 }
 
 $files = array();
 if( !empty($jsonArr["files"]) )
 {
 	$files = $jsonArr["files"];
-	array_remove_value($jsonArr,"files");
 }
 
 //将$jsonArr赋值给$fdroot
