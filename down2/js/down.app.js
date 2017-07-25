@@ -64,21 +64,26 @@ var up6_app = {
         $(window).bind("beforeunload", function () { obj.exit(); });
     }
     , openFolder: function () {
-        var param = { name: "open_folder"};
+        var param = { name: "open_folder" };
         this.postMessage(param);
     }
     , openPath: function (f) {
-        var param = { name: "open_path" };
+        var param = jQuery.extend({},f,{ name: "open_path" });
         this.postMessage(param);
     }
-    , openFile: function (f) {
-        var param = { name: "open_file" };
+    , initFile: function (f) {
+        this.queueCount++;
+        var param = jQuery.extend({}, f, { name: "init_file" });
+        this.postMessage(param);
+    }
+    , initFolder: function (f) {
+        this.queueCount++;
+        var param = jQuery.extend({}, f, { name: "init_folder" });
         this.postMessage(param);
     }
     , addFile: function (f) {
         this.queueCount++;
-        var param = { name: "add_file" };
-        jQuery.extend(param, f);
+        var param = jQuery.extend({}, f, { name: "add_file" });
         this.postMessage(param);
     }
     , addFolder: function (f) {
@@ -89,7 +94,12 @@ var up6_app = {
     }
     , stopFile: function (f) {
         this.queueCount--;
-        var param = { name: "stop_file", signSvr: f.signSvr};
+        var param = { name: "stop_file", id: f.id};
+        this.postMessage(param);
+    }
+    , delFile: function (f) {
+        this.queueCount--;
+        var param = { name: "del_file", id: f.id};
         this.postMessage(param);
     }
     , startQueue: function () {
