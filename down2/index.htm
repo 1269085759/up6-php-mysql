@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>down2-mysql演示页面</title>
+    <title>down2.3-mysql演示页面</title>
     <link href="js/down.css" type="text/css" rel="Stylesheet" />
     <script type="text/javascript" src="js/json2.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
@@ -41,8 +41,6 @@
                         var tdOp = tmp.find('td[name="op"]');
 
                         var f = item;
-                        var idSvr = f.idSvr;
-                        var url = downer.Config["UrlDown"] + "?fid=" + f.idSvr;
 
                         if (f.fdTask ) { tdType.text("文件夹"); }
                         else { tdType.text("文件"); }
@@ -53,15 +51,11 @@
                             //文件夹
                             if ( f.fdTask )
                             {
-                                var d = downer.add_folder(url, f, f.nameLoc);
-                                if (d == null) return;//
+                                downer.add_folder(f);
                             }
                             else
                             {
-                                var d = downer.add_file(url, f.nameLoc);
-                                if (d == null) return;//
-                                d.ui.size.text(f.sizeSvr);
-                                d.ui.name.text(f.nameLoc);
+                                downer.add_file(f);
                             }
                         });
                         tb.append(tmp);
