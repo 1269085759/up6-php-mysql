@@ -1,4 +1,5 @@
 <?php
+/*从up6_files表中加载所有已经上传完成的文件和文件夹*/
 header('Content-Type: text/html;charset=utf-8');
 require('../../utils/inc.php');
 require('../../db/database/DbHelper.php');
