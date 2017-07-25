@@ -71,14 +71,15 @@ class DnFile
 	function updateProcess($fid,$uid,$lenLoc,$perLoc)
 	{
 		$sql = "update down_files set f_lenLoc=:f_lenLoc,f_perLoc=:f_perLoc where f_id=:f_id and f_uid=:f_uid";
-		$cmd = $this->db->prepare_utf8($sql);		
+		$db  = new DbHelper();
+		$cmd = $db->prepare_utf8($sql);				
 
 		$cmd->bindParam(":f_lenLoc", $lenLoc);
 		$cmd->bindParam(":f_perLoc", $perLoc);
 		$cmd->bindParam(":f_id", $fid);
 		$cmd->bindParam(":f_uid", $uid);
 		
-		$this->db->Execute($cmd);
+		$db->ExecuteNonQuery($cmd);
 	}
 	
 	function clear()
