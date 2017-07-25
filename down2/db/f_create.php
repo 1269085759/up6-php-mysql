@@ -1,7 +1,7 @@
 <?php 
 require('../../db/database/DbHelper.php');
 require('../../db/PathTool.php');
-require('DnFile.php');
+require('../biz/DnFile.php');
 require('../model/DnFileInf.php');
 
 $id 		= $_GET["id"];
@@ -14,6 +14,7 @@ $sizeSvr 	= $_GET["sizeSvr"];
 $cbk 		= $_GET["callback"];
 $pathLoc	= PathTool::urldecode_path($pathLoc);
 $nameLoc	= PathTool::urldecode_path($nameLoc);
+$sizeSvr	= PathTool::urldecode_path($sizeSvr);
 
 if (  strlen($uid) < 1
 	||empty($pathLoc)	
