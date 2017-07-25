@@ -106,7 +106,7 @@ $fdroot->sizeLoc	= str_replace("+", " ", $fdroot->sizeLoc);
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
-$fdroot->pidRoot	= $fdroot->id;
+$fdroot->pidRoot	= "";
 $fdroot->pathSvr 	= "";
 $fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
 if( $fdroot->lenLoc == "0") $fdroot->complete = true;
