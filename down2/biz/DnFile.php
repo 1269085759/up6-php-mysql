@@ -116,7 +116,7 @@ class DnFile
 			$f->sizeLoc = $row["f_sizeLoc"];
 			$f->sizeSvr	= $row["f_sizeLoc"];
 			$f->lenSvr 	= $row["f_lenSvr"];
-			$f->pathSvr	= PathTool::urlencode_path( $row["f_pathSvr"] );//防止汉字被转换成unicode
+			$f->pathSvr	= PathTool::urlencode_safe( $row["f_pathSvr"] );//防止汉字被转换成unicode
 		
 			$files[] = $f;
 		}
