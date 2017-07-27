@@ -163,7 +163,7 @@ foreach($files as $file)
 	$f->md5			= $file["md5"];
 	$f->uid			= intval($uid);	
 	$f->pathSvr		= PathTool::combin( $fdroot->pathSvr , $f->pathRel);
-	$f->pathSvr		= str_replace("\\", "/", $f->pathSvr);
+	$f->pathSvr		= str_replace("\\\\", "/", $f->pathSvr);
 		
 	$fd_writer->add_file($f);//添加到数据库
 	
