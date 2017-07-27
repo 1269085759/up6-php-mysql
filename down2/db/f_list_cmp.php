@@ -25,5 +25,5 @@ if ( strlen($uid) > 0)
 		return;
 	}
 }
-echo $cbk . "({\"value\":null})";
+echo "$cbk({\"value\":null})";
 ?>

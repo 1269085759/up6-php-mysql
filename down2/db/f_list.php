@@ -1,8 +1,9 @@
 <?php
 require('../../db/database/DbHelper.php');
-require('../../db/PathTool.php');
-require('../../model/FileInf.php');
+require('../../db/utils/PathTool.php');
+require('../../db/model/FileInf.php');
 require('../model/DnFileInf.php');
+require('../biz/DnFile.php');
 
 $uid 	= $_GET["uid"];
 $cbk 	= $_GET["callback"];//jsonp
