@@ -27,6 +27,8 @@ header("Content-Length: $blockSize");
 
 $readToLen = intval($blockSize);
 $readLen = 0;
+//windows系统中需要将中文转换为gb2312
+$pathSvr = iconv( "UTF-8","GB2312",$pathSvr);
 $file = fopen($pathSvr,"rb");
 fseek($file,$blockOffset);
 while( $readToLen > 1)
