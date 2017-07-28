@@ -14,7 +14,7 @@ require('database/DbHelper.php');
 require('database/DBFile.php');
 
 $uid = $_GET["uid"];
-$fid = $_GET["fid"];
+$fid = $_GET["id"];
 $cbk = $_GET["callback"];
 $ret = $cbk . "(0)";
 
