@@ -137,7 +137,7 @@ class FdDataWriter
 		$cmd->bindValue(":pidRoot", $inf->pidRoot);
 		$cmd->bindValue(":uid", $inf->uid);//是文件夹中的文件
 		$cmd->bindValue(":name", $inf->nameLoc);
-		$cmd->bindValue(":pathLoc", $inf->pathSvr);
+		$cmd->bindValue(":pathLoc", $inf->pathLoc);
 		$cmd->bindValue(":pathSvr", $inf->pathSvr);
 		$cmd->bindValue(":pathRel", $inf->pathRel );
 		
