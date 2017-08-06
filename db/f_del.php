@@ -18,12 +18,12 @@ $fid = $_GET["id"];
 $cbk = $_GET["callback"];
 $ret = $cbk . "(0)";
 
-//md5和uid不能为空
+//参数不为空
 if (	strlen($fid) > 0 
 	&&	strlen($uid) > 0)
 {
 	$db = new DBFile();
-	$db->Delete($uid,$fid);
+	$db->Delete(intval($uid),$fid);
 	$ret = $cbk . "(1)";
 }
 

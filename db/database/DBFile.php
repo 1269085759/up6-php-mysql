@@ -411,7 +411,7 @@ class DBFile
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
 
-		$cmd->bindParam(":f_uid", $f_uid);
+		$cmd->bindValue(":f_uid", $f_uid);
 		$cmd->bindParam(":f_id", $f_id);
 		$db->ExecuteNonQuery($cmd);
 	}

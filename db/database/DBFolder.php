@@ -75,17 +75,25 @@ class DBFolder
 		$db->ExecuteNonQuery($cmd);		
 	}
 
-	function Remove($fid)
+	function Remove($fid,$uid)
 	{
-		$sql = "update up6_files set f_delete=1 where f_id=:id";		
+		$sql = "update up6_files set f_deleted=1 where f_id=:id and f_uid=:uid";		
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
-		$cmd->bindValue(":id",$fid);		
+		$cmd->bindValue(":id",$fid);
+		$cmd->bindValue(":uid",$uid);
 		$db->ExecuteNonQuery($cmd);
 		
-		$sql = "update up6_folders set fd_delete=1 where fd_id=:fd_id";		
+		$sql = "update up6_files set f_deleted=1 where f_pidRoot=:f_pidRoot and f_uid=:f_uid";
+		$cmd =& $db->GetCommand($sql);
+		$cmd->bindParam(":f_pidRoot",$fid);
+		$cmd->bindValue(":f_uid",$uid);
+		$db->ExecuteNonQuery($cmd);
+		
+		$sql = "update up6_folders set fd_delete=1 where fd_id=:fd_id and fd_uid=:fd_uid";		
 		$cmd =& $db->GetCommand($sql);
 		$cmd->bindParam(":fd_id",$fid);
+		$cmd->bindValue(":fd_uid",$uid);
 		$db->ExecuteNonQuery($cmd);
 	}
 
