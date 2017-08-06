@@ -1,5 +1,5 @@
 <?php
-class PathMd5Builder extends PathBuilder
+class PathBuilderMd5 extends PathBuilder
 {
 	function genFolder($uid,&$fd)
 	{

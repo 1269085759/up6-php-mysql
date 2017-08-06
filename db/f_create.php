@@ -57,7 +57,7 @@ $fileSvr->md5 = $md5;
 $fileSvr->uid = intval($uid);
 
 //生成路径
-$pb = new PathMd5Builder();
+$pb = new PathBuilderMd5();
 $fileSvr->pathSvr = $pb->genFile($uid,$fileSvr->md5,$fileSvr->nameLoc);
 
 $db = new DBFile();
