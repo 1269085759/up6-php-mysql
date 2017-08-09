@@ -59,6 +59,7 @@ $fileSvr->uid = intval($uid);
 //生成路径
 $pb = new PathBuilderMd5();
 $fileSvr->pathSvr = $pb->genFile($uid,$fileSvr->md5,$fileSvr->nameLoc);
+$fileSvr->pathSvr = str_replace("\\", "/", $fileSvr->pathSvr);
 
 $db = new DBFile();
 $fileExist = new FileInf();
