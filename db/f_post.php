@@ -24,12 +24,11 @@ $head = new HttpHeader();
 $uid	 		= $head->param("uid");
 $fid	 		= $head->param("id");
 $md5			= $head->param("md5");
-$perSvr			= $head->param("perSvr");
 $lenSvr			= $head->param("lenSvr");
 $lenLoc			= $head->param("lenLoc");
 $f_pos			= $head->param("blockOffset");
-$rangeSize		= $head->param("blockSize");
-$rangeIndex		= $head->param("blockIndex");
+$blockSize		= $head->param("blockSize");
+$blockIndex		= $head->param("blockIndex");
 $complete		= (bool)$head->param("complete");
 $pathSvr		= $head->param("pathSvr");
 $pathSvr		= PathTool::urldecode_path($pathSvr);
@@ -41,7 +40,9 @@ if (   (strlen($lenLoc)>0)
 	&& (strlen($fid)>0) 
 	&& (strlen($f_pos)>0) 
 	&& !empty($pathSvr))
-{		
+{
+	//验证大小
+	if( filesize($fpath) != intval($blockSize) ) return;
 	//保存文件块数据
 	$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
 	$resu->Resumer();	
@@ -56,7 +57,6 @@ else
 	echo "uid:$uid<br/>";
 	echo "fid:$fid<br/>";
 	echo "md5:$md5<br/>";
-	echo "perSvr:$perSvr<br/>";
 	echo "lenSvr:$lenSvr<br/>";
 	echo "lenLoc:$lenLoc<br/>";
 	echo "f_pos:$f_pos<br/>";
