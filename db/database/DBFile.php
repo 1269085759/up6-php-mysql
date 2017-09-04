@@ -240,7 +240,7 @@ class DBFile
 		
 		if (!empty($row))
 		{
-			$inf->idSvr 		= intval($row["f_id"]);
+			$inf->id 			= intval($row["f_id"]);
 			$inf->uid 			= intval($row["f_uid"]);
 			$inf->nameLoc 		= $row["f_nameLoc"];
 			$inf->nameSvr 		= $row["f_nameSvr"];
@@ -250,12 +250,12 @@ class DBFile
 			$inf->md5 			= $md5;
 			$inf->lenLoc 		= intval($row["f_lenLoc"]);
 			$inf->sizeLoc 		= $row["f_sizeLoc"];
-			$inf->FilePos 		= intval($row["f_pos"]);
+			$inf->offset 		= intval($row["f_pos"]);
 			$inf->lenSvr 		= intval($row["f_lenSvr"]);
 			$inf->perSvr 		= $row["f_perSvr"];
 			$inf->complete 		= (bool)$row["f_complete"];
 			$inf->PostedTime 	= $row["f_time"];
-			$inf->IsDeleted 	= (bool)$row["f_deleted"];
+			$inf->deleted 		= (bool)$row["f_deleted"];
 			$ret = true;
 		}
 		return $ret;

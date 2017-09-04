@@ -1,5 +1,5 @@
 <?php
-class PathUuidBuilder extends PathBuilder
+class PathBuilderUuid extends PathBuilder
 {
 	function guid()
 	{
