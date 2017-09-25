@@ -15,79 +15,6 @@ class DBFile
 	{
 		$this->db = new DbHelper();
 	}
-	
-	/// <summary>
-	/// 根据UID获取文件列表，只列出文件，不列出文件夹，文件夹中的文件
-	/// </summary>
-	/// <param name="f_uid"></param>
-	/// <param name="tb"></param>
-	function GetFilesByUid($f_uid,&$tb)
-	{
-		$sql = "select * from up6_files where f_uid=:f_uid and f_deleted=0 and f_fdChild=0;";
-		$db = new DbHelper();
-		$cmd =& $db->GetCommand($sql);
-		
-		$cmd->bindParam(":f_uid",$f_uid);
-
-		$tb = $db->ExecuteDataTable($cmd);
-	}
-	
-	/**
-	 * @param in  $uid
-	 * @param out $files xdb_files array
-	 * @return string
-	 */
-	static function GetAllCompleteFiles($f_uid,&$files)
-	{
-		$sql = "select ";
-		$sql = $sql . "f_id";
-		$sql = $sql . ",f_fdTask";
-		$sql = $sql . ",f_fdID";
-		$sql = $sql . ",f_nameLoc";
-		$sql = $sql . ",f_pathLoc";
-		$sql = $sql . ",f_pathSvr";
-		$sql = $sql . ",f_md5";
-		$sql = $sql . ",f_lenLoc";
-		$sql = $sql . ",f_sizeLoc";
-		$sql = $sql . ",f_pos";
-		$sql = $sql . ",f_lenSvr";
-		$sql = $sql . ",f_perSvr";
-		$sql = $sql . ",f_complete";
-		$sql = $sql . " from up6_files";//联合查询文件夹数据
-		$sql = $sql . " where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=1;";//只加载未完成列表
-
-		//取未完成的文件列表
-		//$files = array();
-		$db = new DbHelper();
-		$cmd =& $db->GetCommand($sql);
-		
-		//设置字符集，防止中文在数据库中出现乱码
-		$db->ExecuteNonQueryConTxt("set names utf8");
-		
-		$cmd->bindParam(":f_uid",$f_uid);
-		$ret = $db->ExecuteDataSet($cmd);
-		foreach($ret as $row)
-		{			
-			$f = new xdb_files();
-			$f->idSvr 			= $row["f_id"];
-			$f->f_fdTask 		= $row["f_fdTask"];
-			$f->f_fdID 			= $row["f_fdID"];
-			$f->nameLoc 		= $row["f_nameLoc"];
-			$f->pathLoc 		= $row["f_pathLoc"];
-			$f->pathSvr			= $row["f_pathSvr"];
-			$f->md5 			= $row["f_md5"];
-			$f->lenLoc 			= $row["f_lenLoc"];
-			$f->sizeLoc 		= $row["f_sizeLoc"];
-			$f->FilePos 		= $row["f_pos"];
-			$f->lenSvr 			= $row["f_lenSvr"];
-			$f->perSvr 			= $row["f_perSvr"];
-			$f->complete 		= $row["f_complete"];
-			$f->IsDeleted		= $row["f_deleted"];
-			$f->PostedTime		= $row["f_time"];
-
-			array_push($files,$f);
-		}
-	}
 
 	/// <summary>
 	/// 获取所有文件和文件夹列表，不包含子文件夹，包含已上传完的和未上传完的
@@ -145,60 +72,6 @@ class DBFile
 			$files[] = $f;
 		}
 		return json_encode($files);
-	}
-
-	/// <summary>
-	/// 根据文件ID获取文件信息
-	/// </summary>
-	/// <param name="f_id"></param>
-	/// <returns></returns>
-	function GetFileInfByFid($f_id,&$inf/*xdb_files*/)
-	{
-		$ret = false;		
-		$sb = "select ";
-		$sb = $sb . "f_uid";
-		$sb = $sb . ",f_nameLoc";
-		$sb = $sb . ",f_nameSvr";
-		$sb = $sb . ",f_pathLoc";
-		$sb = $sb . ",f_pathSvr";
-		$sb = $sb . ",f_pathRel";
-		$sb = $sb . ",f_md5";
-		$sb = $sb . ",f_lenLoc";
-		$sb = $sb . ",f_sizeLoc";
-		$sb = $sb . ",f_pos";
-		$sb = $sb . ",f_lenSvr";
-		$sb = $sb . ",f_perSvr";
-		$sb = $sb . ",f_complete";
-		$sb = $sb . ",f_time";
-		$sb = $sb . ",f_deleted";
-		$sb = $sb . " from up6_files where f_id=:f_id limit 0,1";
-		
-		$db = new DbHelper();
-		$cmd = $db->prepare_utf8($sb);
-		$cmd->bindParam(":f_id",$f_id);
-		$row = $db->ExecuteRow($cmd);
-
-		if ( !empty($row) )
-		{
-			$inf->id 			= $f_id;
-			$inf->uid 			= intval($row["f_uid"]);
-			$inf->nameLoc 		= $row["f_nameLoc"];
-			$inf->nameSvr 		= $row["f_nameSvr"];
-			$inf->pathLoc 		= $row["f_pathLoc"];
-			$inf->pathSvr 		= $row["f_pathSvr"];
-			$inf->pathRel 		= $row["f_pathRel"];
-			$inf->md5 			= $row["f_md5"];
-			$inf->lenLoc 		= intval($row["f_lenLoc"]);
-			$inf->sizeLoc 		= $row["f_sizeLoc"];
-			$inf->offset 		= intval($row["f_pos"]);
-			$inf->lenSvr 		= intval($row["f_lenSvr"]);
-			$inf->perSvr 		= $row["f_perSvr"];
-			$inf->complete 		= (bool)$row["f_complete"];
-			$inf->PostedTime 	= $row["f_time"];
-			$inf->deleted 		= (bool)$row["f_deleted"];
-			$ret = true;
-		}
-		return $ret;
 	}
 
 	/// <summary>
@@ -335,19 +208,6 @@ class DBFile
 		$db = new DbHelper();
 		$db->ExecuteNonQueryTxt("TRUNCATE TABLE up6_files;");
 		$db->ExecuteNonQueryTxt("TRUNCATE TABLE up6_folders;");
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="f_uid"></param>
-	/// <param name="f_id">文件ID</param>
-	function Complete($md5)
-	{
-		$db = new DbHelper();
-		$cmd =& $db->GetCommand("update up6_files set f_lenSvr=f_lenLoc,f_perSvr='100%',f_complete=1 where f_md5=:f_md5;");
-		$cmd->bindParam(":f_md5",$md5);
-		$db->ExecuteNonQuery($cmd);
 	}
 
 	/// <summary>

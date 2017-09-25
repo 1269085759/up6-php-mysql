@@ -21,7 +21,7 @@ $ret 		= "$cbk(0)";
 if ( strlen($md5) > 0 )
 {
 	$db = new DBFile();
-	$db->Complete($md5);
+	$db->UploadComplete($md5);
 	$ret = "$cbk(1)";
 }
 

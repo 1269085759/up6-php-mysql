@@ -73,6 +73,12 @@ class DBFolder
 		$cmd->bindValue(":f_id",$id);
 		$cmd->bindValue(":f_uid",$uid);
 		$db->ExecuteNonQuery($cmd);		
+		
+		$sql = "update up6_folders set fd_complete=1 where fd_id=:fd_id and fd_uid=:fd_uid";
+		$cmd =& $db->GetCommand($sql);
+		$cmd->bindValue(":fd_id",$id);
+		$cmd->bindValue(":fd_uid",$uid);
+		$db->ExecuteNonQuery($cmd);
 	}
 
 	function Remove($fid,$uid)
