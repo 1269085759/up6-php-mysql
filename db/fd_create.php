@@ -49,7 +49,7 @@ header('Content-Type: text/html;charset=utf-8');
 require('database/DbHelper.php');
 require('utils/inc.php');
 require('database/DBFile.php');
-require('database/DbFolder.php');
+require('database/DBFolder.php');
 require('model/FileInf.php');
 require('model/FolderInf.php');
 require('utils/PathTool.php');
@@ -151,7 +151,7 @@ foreach($files as $file)
 	$f->uid			= (int)$uidTxt;	
 	$f->nameSvr		= $f->md5 . "." . PathTool::getExtention($f->pathLoc);
 	//生成文件路径
-	$pb				= new PathMd5Builder();	
+	$pb				= new PathBuilderMd5();	
 	$f->pathSvr		= $pb->genFile($f->uid, $f->md5,$f->nameLoc);
 
 	//存在相同文件
