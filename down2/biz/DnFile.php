@@ -155,7 +155,7 @@ class DnFile
 			$f->pathLoc = PathTool::urlencode_path( $row["f_pathLoc"] );//防止汉字被转换成unicode
 			$f->perLoc 	= $row["f_perLoc"];
 			$f->sizeSvr	= $row["f_sizeSvr"];			
-			$f->fdTask 	= $row["f_fdTask"];
+			$f->fdTask 	= (bool)$row["f_fdTask"];
 		
 			$files[] = $f;
 		}
