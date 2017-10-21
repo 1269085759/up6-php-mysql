@@ -13,7 +13,7 @@
 	VC运行库：http://www.microsoft.com/en-us/download/details.aspx?id=29
 	联系信箱：1085617561@qq.com
 	联系QQ：1085617561
-    版本：2.3
+    版本：2.3.1
 	更新记录：
 		2015-07-31 优化更新进度逻辑
 */
@@ -87,7 +87,7 @@ function HttpUploaderMgr()
 	this.Config = {
 		  "EncodeType"		: "utf-8"
 		, "Company"			: "荆门泽优软件有限公司"
-		, "Version"			: "2,7,111,51250"
+		, "Version"			: "2,7,112,51466"
 		, "License"			: ""//
 		, "Authenticate"	: ""//域验证方式：basic,ntlm
 		, "AuthName"		: ""//域帐号
