@@ -40,8 +40,8 @@ header('Content-Type: text/html;charset=utf-8');
 		2014-09-15 修复设置子文件，子文件夹层级结构错误的问题。
 		2016-04-13 以md5模式上传文件夹
 		2016-05-29 修复添加文件夹数据错误的问题。
-		2017-07-11
-			取消ID生成操作
+		2017-07-11 取消ID生成操作
+		2017-11-14 此页面取消，文件夹上传统一采用uuid模式。
 
 	JSON格式化工具：http://tool.oschina.net/codeformat/json
 	POST数据过大导致接收到的参数为空解决方法：http://sishuok.com/forum/posts/list/2048.html
