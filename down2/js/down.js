@@ -14,7 +14,7 @@
 文档下载：http://www.ncmem.com/download/down2/down2-doc.rar
 联系邮箱：1085617561@qq.com
 联系QQ：1085617561
-版本：2.4.2
+版本：2.4.9
 更新记录：
     2009-11-05 创建
 	2014-02-27 优化版本号。
@@ -44,7 +44,7 @@ function DownloaderMgr()
 		, "Debug"		: false//调试模式
 		, "LogFile"		: "f:\\log.txt"//日志文件路径。
 		, "Company"		: "荆门泽优软件有限公司"
-		, "Version"		: "1,2,71,51661"
+		, "Version"		: "1,2,72,60650"
 		, "License"		: ""//
 		, "Cookie"		: ""//
 		, "ThreadCount"	: 3//并发数
