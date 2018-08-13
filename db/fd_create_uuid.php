@@ -104,7 +104,7 @@ $fdroot->sizeLoc	= str_replace("+", " ", $fdroot->sizeLoc);
 $fdroot->lenSvr		= $jsonArr["lenSvr"];//fix:php32不支持int64
 $fdroot->id 		= $jsonArr["id"];
 $fdroot->uid 		= intval($uid);
-$fdroot->pidRoot	= "";
+$fdroot->pidRoot	= $fdroot->id;
 $fdroot->pathSvr 	= "";
 $fdroot->pathLoc 	= PathTool::urldecode_path($jsonArr["pathLoc"] );
 if( $fdroot->lenLoc == "0") $fdroot->complete = true;
@@ -117,62 +117,6 @@ $fdroot->pathSvr = str_replace("\\", "/", $fdroot->pathSvr);
 $fd_writer = new FdDataWriter();
 $fd_writer->add_folder($fdroot);//添加根目录
 $fd_writer->add_file($fdroot);//
-
-$svr_folders = array();
-
-//解析文件夹
-foreach($folders as $folder)
-{
-	$fd 			= new FolderInf();
-	$fd->nameLoc	= PathTool::unicode_decode( $folder["nameLoc"] );
-	$fd->id 		= $folder["id"];
-	$fd->pid 		= $folder["pid"];
-	$fd->pidRoot 	= $fdroot->id;
-	$fd->uid 		= (int)$uid;
-	$fd->lenLoc		= 0;
-	$fd->pathLoc	= PathTool::unicode_decode( $folder["pathLoc"] );
-	$fd->pathRel 	= PathTool::unicode_decode($folder["pathRel"]);				
-	$fd->pathSvr 	= PathTool::combin($fdroot->pathSvr,$fd->pathRel);
-	$pb->createFolder($fd->pathSvr);//自动创建文件夹	
-	//添加文件夹
-	$fd_writer->add_folder($fd);
-	
-	$svr_folders[] = $fd;
-}
-
-$svr_files = array();
-
-//如果文件非常多可能执行超时
-set_time_limit(0);
-
-//解析文件
-foreach($files as $file)
-{			
-	$f				= new FileInf();
-	$f->nameLoc		= PathTool::unicode_decode( $file["nameLoc"] );
-	$f->nameSvr		= $f->nameLoc;
-	$f->pathLoc		= PathTool::unicode_decode( $file["pathLoc"] );
-	$f->pathRel		= PathTool::unicode_decode( $file["pathRel"] );
-	$f->id			= $file["id"];
-	$f->pid			= $file["pid"];
-	$f->pidRoot		= $file["pidRoot"];
-	$f->fdChild		= true;
-	$f->lenLoc		= $file["lenLoc"];
-	$f->sizeLoc		= $file["sizeLoc"];
-	$f->lenSvr		= $file["lenSvr"];
-	$f->md5			= $file["md5"];
-	$f->uid			= intval($uid);	
-	$f->pathSvr		= PathTool::combin( $fdroot->pathSvr , $f->pathRel);
-	$f->pathSvr		= str_replace("\\\\", "/", $f->pathSvr);
-		
-	$fd_writer->add_file($f);//添加到数据库
-	
-	//创建文件
-	$fr = new FileResumer();
-	$fr->CreateFile($f->pathSvr);
-	
-	$svr_files[] = $f;
-}
 
 $fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
 

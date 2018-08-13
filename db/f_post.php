@@ -45,6 +45,7 @@ if (   (strlen($lenLoc)>0)
 	if( filesize($fpath) != intval($blockSize) ) return;
 	//保存文件块数据
 	$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
+	$resu->CreateFile($pathSvr);
 	$resu->Resumer();	
 	
 	echo "ok";

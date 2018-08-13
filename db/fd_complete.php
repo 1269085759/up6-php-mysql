@@ -1,5 +1,6 @@
 <?php
 ob_start();
+header('Content-Type: text/html;charset=utf-8');
 /*
 	控件每次向此文件POST数据
 	逻辑：
@@ -14,6 +15,10 @@ ob_start();
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
+require('biz/PathBuilder.php');
+require('biz/PathBuilderUuid.php');
+require('model/FileInf.php');
+require('utils/fd_scan.php');
 
 $id   	= $_GET["id"];
 $uid	= $_GET["uid"];
@@ -24,6 +29,14 @@ $ret 	= 0;
 if (	strlen($uid) > 0
 	||	strlen($id) >0  )
 {
+	$inf = new FileInf();
+	$db = new DBFile();
+	$db->query($id,$inf);
+	$root = $inf->pathSvr;
+	
+	$sa = new fd_scan();
+	$sa->scan($inf,$root);
+	
 	$fd = new DBFolder();
 	$fd->Complete($id, $uid);
 	$ret = 1;

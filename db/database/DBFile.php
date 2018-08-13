@@ -275,5 +275,26 @@ class DBFile
 		$cmd->bindParam(":f_id", $f_id);
 		$db->ExecuteNonQuery($cmd);
 	}
+	
+	function query($id, &$inf)
+	{
+		$ret = false;
+		$sql = "select fd_pathSvr,fd_pidRoot from up6_folders where fd_id=:fd_id";
+		$db = &$this->db;
+		$cmd = $db->GetCommand($sql);
+	
+		$cmd->bindParam(":fd_id", $id);
+		$row = $db->ExecuteRow($cmd);
+	
+		if (!empty($row))
+		{
+			$inf->id 			= $id;
+			$inf->pathSvr 		= $row["fd_pathSvr"];
+			$inf->pidRoot 		= $row["fd_pidRoot"];
+			
+			$ret = true;
+		}
+		return $ret;
+	}
 }
 ?>
