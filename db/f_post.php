@@ -29,6 +29,7 @@ $lenLoc			= $head->param("lenLoc");
 $f_pos			= $head->param("blockOffset");
 $blockSize		= $head->param("blockSize");
 $blockIndex		= $head->param("blockIndex");
+$blockMd5		= $head->param("blockMd5");
 $complete		= (bool)$head->param("complete");
 $pathSvr		= $head->param("pathSvr");
 $pathSvr		= PathTool::urldecode_path($pathSvr);
@@ -41,14 +42,38 @@ if (   (strlen($lenLoc)>0)
 	&& (strlen($f_pos)>0) 
 	&& !empty($pathSvr))
 {
-	//验证大小
-	if( filesize($fpath) != intval($blockSize) ) return;
-	//保存文件块数据
-	$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
-	$resu->CreateFile($pathSvr);
-	$resu->Resumer();	
+	$verify = false;
+	$msg = "";
+	$md5Svr = "";
 	
-	echo "ok";
+	if(!empty($blockMd5))
+	{
+		$md5Svr = md5_file($fpath);
+	}
+	
+	//验证大小
+	$verify = intval($blockSize) == filesize($fpath);
+	if( $verify ) 
+	{
+		$msg = "block size error sizeSvr:" . filesize($fpath) . " sizeLoc:" . $blockSize;
+	}
+	
+	if( $verify && !empty($blockMd5) )
+	{
+		$verify = $md5Svr == $blockMd5;
+	}
+	
+	if( $verify )
+	{
+		//保存文件块数据
+		$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
+		if(0 == strcmp($blockIndex,"1")) $resu->CreateFile($pathSvr);
+		$resu->Resumer();
+		
+		$obj = Array('msg'=>'ok', 'md5'=>$md5Svr, 'offset'=>$f_pos);
+		$msg = json_encode($obj);
+	}
+	echo $msg;
 	//调试时，打开下面的代码，显示文件块MD5。
 	//echo "ok".",range_md5:".$resu->m_rangMD5;
 }
