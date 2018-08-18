@@ -227,7 +227,7 @@ class DBFile
 	
 	function fd_scan($id,$uid)
 	{
-		$sql = "update up6_files set f_scan=1 where f_id=:f_id and f_uid=:f_uid;";
+		$sql = "update up6_files set f_scan=1 where f_id=:f_id and f_uid=:f_uid";
 		$db = new DbHelper();
 		$cmd =& $db->GetCommand($sql);
 		
