@@ -74,6 +74,7 @@ class FileInf
 	var $complete=false;
 	var $PostedTime;
 	var $deleted=false;
+	var $scaned=false;
 	
 	function __construct()
 	{

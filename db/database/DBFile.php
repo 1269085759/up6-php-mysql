@@ -76,6 +76,7 @@ class DBFile
 
 	/// <summary>
 	/// 根据文件MD5获取文件信息
+	/// 取已上传完的文件
 	/// </summary>
 	/// <param name="md5"></param>
 	/// <param name="inf"></param>
@@ -101,6 +102,7 @@ class DBFile
 		$sb = $sb . ",f_deleted";
 		$sb = $sb . " from up6_files";
 		$sb = $sb . " where f_md5=:f_md5";
+		$sb = $sb . " and f_complete=1";
 		$sb = $sb . " order by f_lenSvr desc";
 		$sb = $sb . " ) tmp limit 1";
 
@@ -222,6 +224,17 @@ class DBFile
 		$cmd->bindParam(":f_id",$idSvr);
 		$db->ExecuteNonQuery($cmd);
 	}
+	
+	function fd_scan($id,$uid)
+	{
+		$sql = "update up6_files set f_scan=1 where f_id=:f_id and f_uid=:f_uid;";
+		$db = new DbHelper();
+		$cmd =& $db->GetCommand($sql);
+		
+		$cmd->bindParam(":f_id", $id);
+		$cmd->bindValue(":f_uid", $uid);
+		$db->ExecuteNonQuery($cmd);
+	}
 
 	/// <summary>
 	/// 更新上传进度
@@ -257,6 +270,16 @@ class DBFile
 		$cmd =& $db->GetCommand($sql);
 		
 		$cmd->bindParam(":f_md5", $md5);
+		$db->ExecuteNonQuery($cmd);
+	}
+	
+	function complete($id)
+	{
+		$sql = "update up6_files set f_lenSvr=f_lenLoc,f_perSvr='100%',f_complete=1,f_scan=1 where f_id=:f_id";
+		$db = new DbHelper();
+		$cmd =& $db->GetCommand($sql);
+	
+		$cmd->bindParam(":f_id", $id);
 		$db->ExecuteNonQuery($cmd);
 	}
 

@@ -22,7 +22,7 @@ require('model/FolderInf.php');
 require('utils/FileResumer.php');
 require('utils/PathTool.php');
 require('biz/PathBuilder.php');
-require('biz/PathBuilderMd5.php');
+require('biz/PathBuilderUuid.php');
 
 $md5 			= $_GET["md5"];
 $id 			= $_GET["id"];
@@ -49,7 +49,7 @@ $fileSvr->fdChild = false;
 $fileSvr->fdTask = false;
 $fileSvr->nameLoc = PathTool::getName($pathLoc);
 $fileSvr->pathLoc = $pathLoc;
-$fileSvr->nameSvr = "$md5.$ext";
+$fileSvr->nameSvr = $fileSvr->nameLoc;
 $fileSvr->lenLoc = intval($lenLoc);
 $fileSvr->sizeLoc = $sizeLoc;
 $fileSvr->deleted = false;
@@ -57,7 +57,7 @@ $fileSvr->md5 = $md5;
 $fileSvr->uid = intval($uid);
 
 //生成路径
-$pb = new PathBuilderMd5();
+$pb = new PathBuilderUuid();
 $fileSvr->pathSvr = $pb->genFile($uid,$fileSvr->md5,$fileSvr->nameLoc);
 $fileSvr->pathSvr = str_replace("\\", "/", $fileSvr->pathSvr);
 
@@ -67,6 +67,7 @@ $fileExist = new FileInf();
 //数据库存在相同文件
 if ($db->exist_file($md5, $fileExist))
 {
+	$fileSvr->nameSvr = $fileExist->nameSvr;
 	$fileSvr->pathSvr = $fileExist->pathSvr;
 	$fileSvr->perSvr = $fileExist->perSvr;
 	$fileSvr->lenSvr = intval($fileExist->lenSvr);

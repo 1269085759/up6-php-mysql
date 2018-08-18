@@ -18,10 +18,10 @@ $cbk 		= $_GET["callback"];
 $ret 		= "$cbk(0)";
 
 //md5和uid不能为空
-if ( strlen($md5) > 0 )
+if ( strlen($uid) > 0 )
 {
 	$db = new DBFile();
-	$db->UploadComplete($md5);
+	$db->complete($id);
 	$ret = "$cbk(1)";
 }
 

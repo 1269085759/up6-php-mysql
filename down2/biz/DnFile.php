@@ -97,7 +97,7 @@ class DnFile
 				,f_lenSvr
 				,f_pathSvr
 				 from up6_files
-				 where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=1;';
+				 where f_uid=:f_uid and f_deleted=0 and f_fdChild=0 and f_complete=1 and f_scan=1;';
 		
 		//取未完成的文件列表
 		//$files = array();

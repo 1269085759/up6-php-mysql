@@ -34,11 +34,14 @@ if (	strlen($uid) > 0
 	$db->query($id,$inf);
 	$root = $inf->pathSvr;
 	
+	$fd = new DBFolder();
+	$fd->Complete($id, $uid);
+	
 	$sa = new fd_scan();
 	$sa->scan($inf,$root);
 	
-	$fd = new DBFolder();
-	$fd->Complete($id, $uid);
+	$db->fd_scan($id, $uid);
+	
 	$ret = 1;
 }
 echo "$cbk( $ret )";

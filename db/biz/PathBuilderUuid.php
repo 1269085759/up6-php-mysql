@@ -53,5 +53,23 @@ class PathBuilderUuid extends PathBuilder
 		if( !is_dir($path)) mkdir($path,0777,true);
 		return realpath($path);//规范化路径
 	}
+	
+	function genFile($uid,$md5,$nameLoc)
+	{
+		date_default_timezone_set("PRC");//设置北京时区
+		$path = $this->getRoot();
+		$path = PathTool::combin($path, date("Y"));
+		$path = PathTool::combin($path, date("m"));
+		$path = PathTool::combin($path, date("d"));
+		$path = PathTool::combin($path,$this->guid());
+		
+		//在windows平台需要转换成多字节编码
+		//$path = iconv("utf-8", "gb2312", $path);
+		
+		if(!is_dir($path)) mkdir($path,0777,true);
+		$path = realpath($path);//规范化路径
+		$path = PathTool::combin($path,$nameLoc);
+		return $path;
+	}
 }
 ?>
