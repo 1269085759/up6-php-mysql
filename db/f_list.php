@@ -7,7 +7,7 @@ header('Content-Type: text/html;charset=utf-8');
 require('model/FileInf.php');
 require('model/FolderInf.php');
 require('database/DbHelper.php');
-require('database/DbFile.php');
+require('database/DBFile.php');
 require('database/DBFolder.php');
 require('utils/PathTool.php');
 
