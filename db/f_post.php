@@ -74,8 +74,6 @@ if (   (strlen($lenLoc)>0)
 		$msg = json_encode($obj);
 	}
 	echo $msg;
-	//调试时，打开下面的代码，显示文件块MD5。
-	//echo "ok".",range_md5:".$resu->m_rangMD5;
 }
 else
 {
