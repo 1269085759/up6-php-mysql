@@ -28,7 +28,7 @@ class HttpHeader
 	{
 		foreach($this->headers as $hn => $hv)
 		{
-			if( strcmp($hn, $name) == 0) return $hv;
+			if( strcasecmp($hn, $name) == 0) return $hv;
 		}
 		return null;
 	}

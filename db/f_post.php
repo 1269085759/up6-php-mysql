@@ -53,7 +53,7 @@ if (   (strlen($lenLoc)>0)
 	
 	//验证大小
 	$verify = intval($blockSize) == filesize($fpath);
-	if( $verify ) 
+	if( !$verify ) 
 	{
 		$msg = "block size error sizeSvr:" . filesize($fpath) . " sizeLoc:" . $blockSize;
 	}
@@ -73,6 +73,7 @@ if (   (strlen($lenLoc)>0)
 		$obj = Array('msg'=>'ok', 'md5'=>$md5Svr, 'offset'=>$f_pos);
 		$msg = json_encode($obj);
 	}
+	ob_clean();
 	echo $msg;
 }
 else
