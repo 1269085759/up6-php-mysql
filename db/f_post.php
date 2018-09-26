@@ -61,6 +61,7 @@ if (   (strlen($lenLoc)>0)
 	if( $verify && !empty($blockMd5) )
 	{
 		$verify = $md5Svr == $blockMd5;
+		if(!$verify) $msg = "block md5 error";
 	}
 	
 	if( $verify )
