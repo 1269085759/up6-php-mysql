@@ -60,6 +60,7 @@ require('utils/FileResumer.php');
 require('biz/PathBuilder.php');
 require('biz/PathBuilderMd5.php');
 require('biz/PathBuilderUuid.php');
+require('biz/up6_biz_event.php');
 require('utils/FdDataWriter.php');
 
 $jsonTxt = $_POST["folder"];
@@ -123,6 +124,9 @@ $fdroot->pathSvr = PathTool::urlencode_safe($fdroot->pathSvr);
 $fdroot->complete = false;
 //fix(2017-04-19):增加对空文件夹的处理
 if( $fdroot->lenLoc == 0 ) $fdroot->complete = true;
+//触发事件
+up6_biz_event::folder_create($fdroot);
+
 $json = json_encode($fdroot);//fix:汉字被编码成了unicode
 $json = urldecode( $json );
 

@@ -11,6 +11,7 @@ ob_start();
 			简化文件块逻辑，
 			取消进度更新操作
 */
+require('biz/up6_biz_event.php');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('model/FileInf.php');
@@ -70,6 +71,7 @@ if (   (strlen($lenLoc)>0)
 		$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
 		if(0 == strcmp($blockIndex,"1")) $resu->CreateFile($pathSvr);
 		$resu->Resumer();
+		up6_biz_event::file_post_block($fid, $blockIndex);
 		
 		$obj = Array('msg'=>'ok', 'md5'=>$md5Svr, 'offset'=>$f_pos);
 		$msg = json_encode($obj);

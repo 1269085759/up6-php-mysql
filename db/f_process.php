@@ -11,6 +11,7 @@ ob_start();
 			简化文件块逻辑，
 			取消进度更新操作
 */
+require('biz/up6_biz_event.php');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 
@@ -32,6 +33,7 @@ if (   (strlen($id)>0)
 {	
 	$db = new DBFile();
 	$db->f_process($uid, $id, $offset, $lenSvr, $perSvr);
+	up6_biz_event::file_post_process($id);
 	$json = "$cbk({\"state\":1})";	
 }
 echo $json;

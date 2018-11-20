@@ -17,6 +17,7 @@ require('database/DBFile.php');
 require('database/DBFolder.php');
 require('biz/PathBuilder.php');
 require('biz/PathBuilderUuid.php');
+require('biz/up6_biz_event.php');
 require('model/FileInf.php');
 require('utils/fd_scan.php');
 
@@ -41,6 +42,8 @@ if (	strlen($uid) > 0
 	$sa->scan($inf,$root);
 	
 	$db->fd_scan($id, $uid);
+	
+	up6_biz_event::folder_post_complete($id);
 	
 	$ret = 1;
 }

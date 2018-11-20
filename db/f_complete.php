@@ -7,6 +7,7 @@ header('Content-Type: text/html;charset=utf-8');
 	如果服务器不存在此文件，则添加一条记录，百分比为100%
 	如果服务器已存在相同文件，则将文件上传百分比更新为100%
 */
+require('biz/up6_biz_event.php');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 require('database/DBFolder.php');
@@ -22,6 +23,7 @@ if ( strlen($uid) > 0 )
 {
 	$db = new DBFile();
 	$db->complete($id);
+	up6_biz_event::file_post_complete($id);
 	$ret = "$cbk(1)";
 }
 

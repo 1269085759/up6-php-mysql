@@ -10,6 +10,7 @@ header('Content-Type: text/html;charset=utf-8');
 		2012-4-2 创建
 		2014-09-12 完成逻辑。
 */
+require('biz/up6_biz_event.php');
 require('database/DbHelper.php');
 require('database/DBFile.php');
 
@@ -24,6 +25,7 @@ if (	strlen($fid) > 0
 {
 	$db = new DBFile();
 	$db->Delete(intval($uid),$fid);
+	up6_biz_event::file_del($fid, intval($uid));
 	$ret = $cbk . "(1)";
 }
 

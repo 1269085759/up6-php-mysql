@@ -23,6 +23,7 @@ require('utils/FileResumer.php');
 require('utils/PathTool.php');
 require('biz/PathBuilder.php');
 require('biz/PathBuilderUuid.php');
+require('biz/up6_biz_event.php');
 
 $md5 			= $_GET["md5"];
 $id 			= $_GET["id"];
@@ -73,10 +74,15 @@ if ($db->exist_file($md5, $fileExist))
 	$fileSvr->lenSvr = intval($fileExist->lenSvr);
 	$fileSvr->complete = (bool)$fileExist->complete;
 	$db->Add($fileSvr);
+	
+	//触发事件
+	up6_biz_event::file_create_same($fileSvr);
 }//数据库不存在相同文件
 else
 {
 	$db->Add($fileSvr);
+	//触发事件
+	up6_biz_event::file_create($fileSvr);
 	
 	//创建文件
 	$fr = new FileResumer();
