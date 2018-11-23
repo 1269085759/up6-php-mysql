@@ -41,7 +41,7 @@ class PathBuilderUuid extends PathBuilder
 		$path = PathTool::combin($path,$fd->nameLoc);
 		
 		//在windows平台需要转换成多字节编码
-		$path = iconv("utf-8", "gb2312", $path);
+		$path = iconv("utf-8", "gbk", $path);
 		
 		if( !is_dir($path)) mkdir($path,0777,true);
 		return realpath($path);//规范化路径
@@ -49,7 +49,7 @@ class PathBuilderUuid extends PathBuilder
 	
 	function createFolder($v)
 	{
-		$path = iconv("utf-8","gb2312",$v);
+		$path = iconv("utf-8","gbk",$v);
 		if( !is_dir($path)) mkdir($path,0777,true);
 		return realpath($path);//规范化路径
 	}
