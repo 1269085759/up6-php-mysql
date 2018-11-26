@@ -49,7 +49,7 @@ function HttpUploaderMgr()
 	this.Config = {
 		  "EncodeType"		: "utf-8"
 		, "Company"			: "荆门泽优软件有限公司"
-		, "Version"			: "2,7,108,51167"
+		, "Version"			: "2,7,117,60757"
 		, "License"			: ""//
 		, "Authenticate"	: ""//域验证方式：basic,ntlm
 		, "AuthName"		: ""//域帐号
@@ -59,7 +59,7 @@ function HttpUploaderMgr()
 		, "FileSizeLimit"	: "0"//自定义允许上传的文件大小，以字节为单位。0表示不限制。字节计算工具：http://www.beesky.com/newsite/bit_byte.htm
 		, "FilesLimit"		: "0"//文件选择数限制。0表示不限制
 		, "AllowMultiSelect": false//多选开关。1:开启多选。0:关闭多选
-		, "RangeSize"		: "2097152"//文件块大小，以字节为单位。必须为64KB的倍数。推荐大小：1MB。
+		, "RangeSize"		: "1048576"//文件块大小，以字节为单位。必须为64KB的倍数。推荐大小：1MB。
 		, "Debug"			: false//是否打开调式模式。true,false
 		, "LogFile"			: "F:\\log.txt"//日志文件路径。需要先打开调试模式。
 		, "InitDir"			: ""//初始化路径。示例：D:\\Soft
@@ -93,7 +93,7 @@ function HttpUploaderMgr()
         , edge: {protocol:"up6",port:9100,visible:false}
         , exe: { path: "http://www.ncmem.com/download/up6.3/up6.exe" }
 		, "SetupPath": "http://localhost:4955/demoAccess/js/setup.htm"
-        , "Fields": {"uname": "test","upass": "test","uid":"0"}
+        , "Fields": {"uname": "test","upass": "test","uid":"0","fid":"0"}
 	};
 
     //biz event
