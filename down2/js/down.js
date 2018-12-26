@@ -96,6 +96,7 @@ function DownloaderMgr()
     this.chrVer = navigator.appVersion.match(/Chrome\/(\d+)/);
     this.edge = navigator.userAgent.indexOf("Edge") > 0;
     this.edgeApp = new WebServer(this);
+    this.edgeApp.ent.on_close = function () { _this.socket_close(); };
     this.app = up6_app;
     this.app.edgeApp = this.edgeApp;
     this.app.Config = this.Config;
@@ -384,6 +385,13 @@ function DownloaderMgr()
         this.btnSetup.hide();
         _this.app.init();
     };
+    this.socket_close = function () {
+        while (_this.QueuePost.length > 0)
+        {
+            _this.filesMap[_this.QueuePost[0]].post_stoped(null);
+        }
+		_this.QueuePost.length = 0;
+    };
 	this.recvMessage = function (str)
 	{
 	    var json = JSON.parse(str);
@@ -531,7 +539,7 @@ function DownloaderMgr()
             }
 
             if (_this.edge) {
-                _this.edgeApp.run();
+                _this.edgeApp.connect();
             }
             else {
                 _this.app.init();
