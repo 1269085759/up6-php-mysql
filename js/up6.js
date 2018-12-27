@@ -914,7 +914,7 @@ function HttpUploaderMgr()
 
 		for (a in _this.filesMap)
 		{
-			if (_this.filesMap[a].LocalFile == fn)
+		    if (_this.filesMap[a].fileSvr.pathLoc == fn)
 			{
 				return true;
 			}
