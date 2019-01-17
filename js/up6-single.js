@@ -585,7 +585,7 @@ function FileUploader(fileLoc, mgr)
 			{
 			    _this.event.fileComplete(_this);//触发事件
 			}
-			, error: function () { alert("文件-向服务器发送Complete信息错误！" + req.responseText); }
+			, error: function (req, txt, err) { alert("文件-向服务器发送Complete信息错误！" + req.responseText); }
 			, complete: function (req, sta) { req = null; }
         });
     };
