@@ -914,10 +914,12 @@ function HttpUploaderMgr()
 
 		for (a in _this.filesMap)
 		{
-		    if (_this.filesMap[a].fileSvr.pathLoc == fn)
-			{
-				return true;
-			}
+		    var fileSvr = _this.filesMap[a].fileSvr;
+		    if (_this.filesMap[a].isFolder) fileSvr = _this.filesMap[a].folderSvr;
+		    if (fileSvr.pathLoc == fn)
+		    {
+		        return true;
+		    }
 		}
 		return false;
 	};

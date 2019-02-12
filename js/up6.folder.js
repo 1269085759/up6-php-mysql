@@ -219,6 +219,7 @@ function FolderUploader(fdLoc, mgr)
         this.ui.process.css("width", "100%");
         this.ui.percent.text("(100%)");
         //obj.pMsg.text("上传完成");
+        this.manager.arrFilesComplete.push(this);
         this.State = HttpUploaderState.Complete;
         this.folderSvr.complete = true;
         this.folderSvr.perSvr = "100%";
@@ -308,6 +309,7 @@ function FolderUploader(fdLoc, mgr)
         });
         this.ui.process.css("width", "100%");
         this.ui.percent.text("(100%)");
+        this.manager.arrFilesComplete.push(this);
         this.State = HttpUploaderState.Complete;
         this.folderSvr.complete = true;
         this.folderSvr.perSvr = "100%";
