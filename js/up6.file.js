@@ -10,7 +10,7 @@ function FileUploader(fileLoc, mgr)
     this.event = mgr.event;
     this.FileListMgr = mgr.FileListMgr;//文件列表管理器
     this.Config = mgr.Config;
-    this.fields = jQuery.extend({}, mgr.Config.Fields,fileLoc.fields);//每一个对象自带一个fields幅本
+    this.fields = jQuery.extend({}, mgr.Config.Fields, fileLoc.fields);//每一个对象自带一个fields幅本
     this.State = HttpUploaderState.None;
     this.uid = this.fields.uid;
     this.fileSvr = {
@@ -250,6 +250,7 @@ function FileUploader(fileLoc, mgr)
     this.post = function ()
     {
         this.Manager.AppendQueuePost(this.fileSvr.id);
+        this.Manager.RemoveQueueWait(this.fileSvr.id);
         if (this.fileSvr.md5.length > 0)
         {
             this.post_file();

@@ -134,10 +134,11 @@ function FolderUploader(fdLoc, mgr)
         this.ui.size.text(json.sizeLoc);
         this.Scaned = true;
         this.ui.msg.text("扫描完毕，准备计算MD5");
-        
+        this.event.scanComplete(this);
+
         delete json.files;
         delete json.folders;
-        
+
         var self = this;
         if (this.Config["Md5Folder"])
         {

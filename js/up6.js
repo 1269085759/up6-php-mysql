@@ -130,6 +130,7 @@ function HttpUploaderMgr()
     //biz event
 	this.event = {
 	      "md5Complete": function (obj/*HttpUploader对象*/, md5) { }
+        , "scanComplete": function (obj/*文件夹扫描完毕，参考：FolderUploader*/) { }
         , "fileComplete": function (obj/*文件上传完毕，参考：FileUploader*/) { }
         , "fdComplete": function (obj/*文件夹上传完毕，参考：FolderUploader*/) { }
         , "queueComplete": function () {/*队列上传完毕*/ }
@@ -475,7 +476,7 @@ function HttpUploaderMgr()
 	this.open_files = function (json)
 	{
 	    for (var i = 0, l = json.files.length; i < l; ++i)
-	    {
+        {
 	        this.addFileLoc(json.files[i]);
 	    }
 	    setTimeout(function () { _this.PostFirst(); },500);
@@ -664,7 +665,7 @@ function HttpUploaderMgr()
 			if (_this.QueuePost.length > 0)
             {
 				_this.StopAll();
-			}
+            }
 		});
 	};
 
@@ -931,7 +932,7 @@ function HttpUploaderMgr()
 	*/
 	this.Delete = function(fid)
 	{
-		_this.RemoveQueue(fid); //从队列中删除
+		//_this.RemoveQueue(fid); //从队列中删除
 		_this.RemoveQueueWait(fid);//从未上传列表中删除
 	};
 
