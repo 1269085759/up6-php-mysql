@@ -46,7 +46,7 @@ class FileResumer
 	}
 
 	//创建文件,f_create.php调用
-	function CreateFile($path)
+	function CreateFile($path,$lenLoc)
 	{
 		$path = iconv( "utf-8","gbk",$path);
 		
@@ -55,8 +55,8 @@ class FileResumer
 		if( !is_dir($fd)) mkdir($fd,0777,true);
 		
 		$hfile = fopen($path,"wb");
-		//不再按实际文件大小创建文件，而是创建一个小文件，减少用户上传等待的时间。
-		ftruncate($hfile,0);
+		//以原始大小创建文件
+		ftruncate($hfile,$lenLoc);
 		fclose($hfile);
 	}
 	

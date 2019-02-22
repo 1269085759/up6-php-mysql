@@ -69,7 +69,7 @@ if (   (strlen($lenLoc)>0)
 	{
 		//保存文件块数据
 		$resu = new FileResumer($fpath,$lenLoc,$md5,$f_pos,$pathSvr);
-		if(0 == strcmp($blockIndex,"1")) $resu->CreateFile($pathSvr);
+		if(0 == strcmp($blockIndex,"1")) $resu->CreateFile($pathSvr,$lenLoc);
 		$resu->Resumer();
 		up6_biz_event::file_post_block($fid, $blockIndex);
 		

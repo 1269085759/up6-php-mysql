@@ -86,7 +86,7 @@ else
 	
 	//创建文件
 	$fr = new FileResumer();
-	$fr->CreateFile($fileSvr->pathSvr);
+	$fr->CreateFile($fileSvr->pathSvr,$fileSvr->lenLoc);
 }
 //fix:防止json_encode将汉字转换成unicode
 $fileSvr->nameLoc = PathTool::urlencode_safe($fileSvr->nameLoc);
