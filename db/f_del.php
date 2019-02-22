@@ -10,20 +10,22 @@ header('Content-Type: text/html;charset=utf-8');
 		2012-4-2 创建
 		2014-09-12 完成逻辑。
 */
-require('DbHelper.php');
-require('DBFile.php');
+require('biz/up6_biz_event.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
 
 $uid = $_GET["uid"];
-$fid = $_GET["fid"];
+$fid = $_GET["id"];
 $cbk = $_GET["callback"];
 $ret = $cbk . "(0)";
 
-//md5和uid不能为空
+//参数不为空
 if (	strlen($fid) > 0 
 	&&	strlen($uid) > 0)
 {
 	$db = new DBFile();
-	$db->Delete($uid,$fid);
+	$db->Delete(intval($uid),$fid);
+	up6_biz_event::file_del($fid, intval($uid));
 	$ret = $cbk . "(1)";
 }
 

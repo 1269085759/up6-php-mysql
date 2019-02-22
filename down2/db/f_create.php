@@ -1,25 +1,24 @@
 <?php 
-require('../../db/DbHelper.php');
-require('../../db/PathTool.php');
-require('DnFile.php');
+require('../../db/database/DbHelper.php');
+require('../../db/utils/PathTool.php');
+require('../../db/model/FileInf.php');
 require('../model/DnFileInf.php');
+require('../biz/DnFile.php');
 
+$id 		= $_GET["id"];
 $uid 		= $_GET["uid"];
-$nameLoc 	= $_GET["nameCustom"];
+$fdTask 	= $_GET["fdTask"];
+$nameLoc 	= $_GET["nameLoc"];
 $pathLoc 	= $_GET["pathLoc"];
-$pathSvr 	= $_GET["fileUrl"];
 $lenSvr 	= $_GET["lenSvr"];
 $sizeSvr 	= $_GET["sizeSvr"];
 $cbk 		= $_GET["callback"];
-$pathLoc	= str_replace("+","%20",$pathLoc);
-$nameLoc	= str_replace("+","%20",$nameLoc);
-$pathLoc	= urldecode($pathLoc);
-$nameLoc	= urldecode($nameLoc);
-
+$pathLoc	= PathTool::urldecode_path($pathLoc);
+$nameLoc	= PathTool::urldecode_path($nameLoc);
+$sizeSvr	= PathTool::urldecode_path($sizeSvr);
 
 if (  strlen($uid) < 1
-	||empty($pathLoc)
-	||empty($pathSvr)
+	||empty($pathLoc)	
 	||empty($lenSvr))
 {
 	echo cbk . "({\"value\":null})";
@@ -27,15 +26,16 @@ if (  strlen($uid) < 1
 }
 
 $inf = new DnFileInf();
+$inf->id = $id;
 $inf->uid = intval($uid);
 $inf->nameLoc = $nameLoc;
 $inf->pathLoc = $pathLoc;
-$inf->fileUrl = $pathSvr;
 $inf->lenSvr = intval($lenSvr);
 $inf->sizeSvr = $sizeSvr;
+$inf->fdTask = $fdTask == "1";
 
 $db = new DnFile();
-$inf->idSvr = (int)$db->Add($inf);
+$db->Add($inf);
 
 //防止jsonencode将汉字转换为unicode
 $inf->nameLoc = PathTool::urlencode_safe($inf->nameLoc);

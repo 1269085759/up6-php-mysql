@@ -9,23 +9,23 @@ ob_start();
 		2014-04-09 增加文件块验证功能。
 		2014-09-12 完成逻辑
 */
-require('DbHelper.php');
-require('DBFile.php');
-require('DBFolder.php');
-require('UploaderCfg.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
+require('database/DBFolder.php');
 
-$fid = $_GET["fid"];
+$fid = $_GET["id"];
 $uid = $_GET["uid"];
 $cbk = $_GET["callback"];//jsonp
 $ret = 0;
 
 //参数不为空
 if (	strlen($fid) > 0
-	||	strlen($uid) > 0 )
-{
-	DBFolder::Remove($fid,$uid);
+	&&	strlen($uid) > 0)
+{	
+	$db = new DBFolder();
+	$db->Remove($fid,intval($uid));
 	$ret = 1;
 }
-echo "$cbk($ret)";
+echo "$cbk({\"value\":$ret})";
 header('Content-Length: ' . ob_get_length());
 ?>

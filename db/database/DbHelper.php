@@ -19,9 +19,9 @@ class DbHelper
 	function __construct() 
 	{
         $this->m_host 	= "localhost";  //
-		$this->m_dbName = "HttpUploader6";
+		$this->m_dbName = "up6";
 		$this->m_uname	= "root";
-		$this->m_upass	= "";
+		$this->m_upass	= "123456";
 		$this->m_dbStr = "mysql:host=" . $this->m_host . ";dbname=" . $this->m_dbName;		
 	}
 	
@@ -87,6 +87,20 @@ class DbHelper
 		
 		$stmt = $con->prepare($sql);
 		return $stmt;
+	}
+	
+	/**
+	 * 批量执行SQL
+	 * @param unknown $sqls
+	 */
+	function exeSqls($sqls)
+	{
+		$con = $this->GetCon();
+		//$con->exec($sql);
+		foreach($sqls as $sql)
+		{
+			$con->exec($sql);			
+		}
 	}
 	
 	/**

@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>down2-mysql演示页面</title>
+    <title>down2.3-mysql演示页面</title>
     <link href="js/down.css" type="text/css" rel="Stylesheet" />
     <script type="text/javascript" src="js/json2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+    <script type="text/javascript" src="js/down.app.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/down.edge.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/down.file.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/down.folder.js" charset="utf-8"></script>    
+    <script type="text/javascript" src="js/down.folder.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/down.js" charset="utf-8"></script>
     <script language="javascript" type="text/javascript">
         var downer = new DownloaderMgr();
+        downer.Config["Folder"] = "";
 
         function loadAllComplete()
         {
@@ -19,10 +22,14 @@
                 , dataType: 'jsonp'
                 , jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
                 , url: downer.Config["UrlListCmp"]
-                , data: { uid: downer.Fields["uid"], time: new Date().getTime() }
+                , data: { uid: downer.Config.Fields["uid"], time: new Date().getTime() }
                 , success: function (msg)
                 {
-                    if (msg.value == null) return;
+                	if (msg.value == null)
+                    {
+                        $("#msg_load").hide();
+                        return;
+                    }
 
                     var files = JSON.parse( decodeURIComponent(msg.value) );
                     var tb = $("#tbCmp");
@@ -37,41 +44,39 @@
                         var tdName = tmp.find('td[name="name"]');
                         var tdSize = tmp.find('td[name="size"]');
                         var tdOp = tmp.find('td[name="op"]');
-
                         var f = item;
-                        var idSvr = f.idSvr;
-                        var url = downer.Config["UrlDown"] + "?fid=" + f.idSvr;
-
+                        f.fileUrl = downer.Config.UrlDown;
                         if (f.fdTask ) { tdType.text("文件夹"); }
                         else { tdType.text("文件"); }
                         tdName.text(f.nameLoc);
                         tdSize.text(f.sizeSvr);
                         tdOp.text("下载").css("cursor", "pointer").click(function ()
                         {
+
+                            if (downer.Config["Folder"] == "") { downer.app.openFolder();return; }
                             //文件夹
                             if ( f.fdTask )
                             {
-                                var d = downer.add_folder(url, f, f.nameLoc);
-                                if (d == null) return;//
+                                downer.app.addFolder(f);
                             }
                             else
                             {
-                                var d = downer.add_file(url, f.nameLoc);
-                                if (d == null) return;//
-                                d.ui.size.text(f.sizeSvr);
-                                d.ui.name.text(f.nameLoc);
+                                downer.app.addFile(f);
                             }
                         });
                         tb.append(tmp);
                     });
+                    tb.show();
+                    $("#msg_load").hide();
                 }
                 , error: function (req, txt, err) { alert("加载上传数据失败！" + req.responseText); }
                 , complete: function (req, sta) { req = null; }
             });
         }
 
-    	$(document).ready(function ()
-    	{
+    	$(function ()
+        {
+            $("#tbCmp").hide().after("<p id='msg_load'>正在加载数据<p>");
     	    downer.loadTo("downDiv");
 
     	    //加载HttpUploader6上传的文件列表

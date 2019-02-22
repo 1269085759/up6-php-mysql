@@ -36,7 +36,7 @@ class FileResumer
 		$this->m_RangePos	= intval($rangPos);
 		$this->m_RangeSize	= filesize($this->m_FileTemp);//获取临时文件大小
 		//$this->m_pathSvr	= $pathSvr;
-		$this->m_pathSvr = iconv("UTF-8","GB2312", $pathSvr);
+		$this->m_pathSvr = iconv("utf-8","gbk", $pathSvr);
 	}
 	
 	//获取临时文件大小
@@ -46,12 +46,17 @@ class FileResumer
 	}
 
 	//创建文件,f_create.php调用
-	function CreateFile($path)
+	function CreateFile($path,$lenLoc)
 	{
-		$path = iconv( "UTF-8","GB2312",$path);
+		$path = iconv( "utf-8","gbk",$path);
+		
+		//创建层级目录
+		$fd = dirname($path);
+		if( !is_dir($fd)) mkdir($fd,0777,true);
+		
 		$hfile = fopen($path,"wb");
-		//不再按实际文件大小创建文件，而是创建一个小文件，减少用户上传等待的时间。
-		ftruncate($hfile,0);
+		//以原始大小创建文件
+		ftruncate($hfile,$lenLoc);
 		fclose($hfile);
 	}
 	

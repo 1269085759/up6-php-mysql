@@ -2,30 +2,27 @@
 /*
 	更新记录：
 		2014-08-12 更新
+		2017-07-12 更名为FileInf
 */
-class xdb_files
+class FileInf
 {
-	var $idSvr=0;
+	var $id="";
 	/**
 	 * 文件夹ID
 	 */
-	var $pid=0;
+	var $pid="";
     /**
      * 根级文件夹ID
      */
-    var $pidRoot=0;
+    var $pidRoot="";
 	/**
 	 * 表示当前项是否是一个文件夹项。
 	 */
-	var $fdTask;
-	/**
-	 * 与xdb_folders.fd_id对应
-	 */
-	var $fdID=0;
+	var $fdTask = false;
 	/// <summary>
 	/// 是否是文件夹中的子文件
 	/// </summary>
-	var $f_fdChild;
+	var $fdChild = false;
 	/**
 	 * 用户ID。与第三方系统整合使用。
 	 */
@@ -63,9 +60,9 @@ class xdb_files
 	 */
 	var $sizeLoc="";
 	/**
-	 * 文件续传位置。
+	 * 文件续传位置。相对于整个文件的偏移
 	 */
-	var $FilePos=0;
+	var $offset=0;
 	/**
 	 * 已上传大小。以字节为单位
 	 */
@@ -73,20 +70,11 @@ class xdb_files
 	/**
 	 * 已上传百分比。示例：10%
 	 */
-	var $perSvr="";
+	var $perSvr="0%";
 	var $complete=false;
 	var $PostedTime;
 	var $deleted=false;
-	/**
-	 * 文件夹JSON信息
-	 */
-	var $fd_json="";
-	
-	//提供给文件夹使用的变量
-	//文件总数
-	var $filesCount=0;
-	//已经完成的文件数
-	var $filesComplete=0;
+	var $scaned=false;
 	
 	function __construct()
 	{
