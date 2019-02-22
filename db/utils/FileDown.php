@@ -16,7 +16,7 @@ if( strlen($fid) >0)
 {
 	$db = new DBFile();
 	$fileSvr = new FileInf();
-	if($db->GetFileInfByFid($fid,&$fileSvr) )
+	if($db->GetFileInfByFid($fid,$fileSvr) )
 	{		
 		dl_file_resume($fileSvr->pathSvr,iconv("UTF-8","GB2312",$fileSvr->nameLoc));
 	}

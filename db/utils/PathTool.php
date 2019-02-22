@@ -69,12 +69,8 @@ class PathTool
 	//将多字节转换为utf8
 	static function unicode_decode($str)
 	{
-		return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',
-				create_function(
-						'$matches',
-						'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
-				),
-				$str);
+	    $func = function($matches) {return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");};
+		return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',$func,$str);
 	}	
 }
 ?>
