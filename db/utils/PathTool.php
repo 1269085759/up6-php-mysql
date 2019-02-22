@@ -32,6 +32,13 @@ class PathTool
 		return $txt;		
 	}
 	
+	static function urldecode_path($txt)
+	{
+		$txt = str_replace("+","%20",$txt);
+		$txt = urldecode($txt);
+		return $txt;				
+	}
+	
 	static function combin($p1,$p2)
 	{
 		$str_len = strlen($p1);//总长度
@@ -42,5 +49,32 @@ class PathTool
 		}
 		return $p1 . "/" . $p2;
 	}
+	
+	static function to_utf8($str)
+	{
+		$encode = mb_detect_encoding($str, array('ASCII','GB2312','GBK','UTF-8'));
+		if( $encode == "UTF-8" ) return $str;
+	
+		return iconv($encode, "UTF-8", $str);
+	}
+	
+	static function to_gbk($str)
+	{
+		$encode = mb_detect_encoding($str, array('ASCII','GB2312','GBK','UTF-8'));
+		if( $encode != "UTF-8" ) return $str;
+	
+		return iconv($encode, "GB2312", $str);
+	}
+	
+	//将多字节转换为utf8
+	static function unicode_decode($str)
+	{
+		return preg_replace_callback('/\\\\u([0-9a-f]{4})/i',
+				create_function(
+						'$matches',
+						'return mb_convert_encoding(pack("H*", $matches[1]), "UTF-8", "UCS-2BE");'
+				),
+				$str);
+	}	
 }
 ?>

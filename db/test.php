@@ -2,9 +2,9 @@
 ob_start();
 header('Content-Type: text/html;charset=utf-8');
 require('inc.php');
-require('DbHelper.php');
-require('DBFile.php');
-require('DbFolder.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
+require('database/DbFolder.php');
 require('FileInf.php');
 require('FolderInf.php');
 require('FdDataWriter.php');

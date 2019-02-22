@@ -1,12 +1,7 @@
 <?php
 
-require('DbHelper.php');
-require('inc.php');
-require('DBFile.php');
-require('DbFolder.php');
-require('FileInf.php');
-require('FolderInf.php');
+require('database/DbHelper.php');
+require('database/DBFile.php');
 
 DBFile::Clear();
-DBFolder::Clear();
 ?>

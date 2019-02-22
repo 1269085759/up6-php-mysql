@@ -1,5 +1,5 @@
 <?php
-class PathUuidBuilder extends PathBuilder
+class PathBuilderUuid extends PathBuilder
 {
 	function guid()
 	{
@@ -41,7 +41,7 @@ class PathUuidBuilder extends PathBuilder
 		$path = PathTool::combin($path,$fd->nameLoc);
 		
 		//在windows平台需要转换成多字节编码
-		$path = iconv("utf-8", "gb2312", $path);
+		$path = iconv("utf-8", "gbk", $path);
 		
 		if( !is_dir($path)) mkdir($path,0777,true);
 		return realpath($path);//规范化路径
@@ -49,9 +49,27 @@ class PathUuidBuilder extends PathBuilder
 	
 	function createFolder($v)
 	{
-		$path = iconv("utf-8","gb2312",$v);
+		$path = iconv("utf-8","gbk",$v);
 		if( !is_dir($path)) mkdir($path,0777,true);
 		return realpath($path);//规范化路径
+	}
+	
+	function genFile($uid,$md5,$nameLoc)
+	{
+		date_default_timezone_set("PRC");//设置北京时区
+		$path = $this->getRoot();
+		$path = PathTool::combin($path, date("Y"));
+		$path = PathTool::combin($path, date("m"));
+		$path = PathTool::combin($path, date("d"));
+		$path = PathTool::combin($path,$this->guid());
+		
+		//在windows平台需要转换成多字节编码
+		//$path = iconv("utf-8", "gb2312", $path);
+		
+		if(!is_dir($path)) mkdir($path,0777,true);
+		$path = realpath($path);//规范化路径
+		$path = PathTool::combin($path,$nameLoc);
+		return $path;
 	}
 }
 ?>
